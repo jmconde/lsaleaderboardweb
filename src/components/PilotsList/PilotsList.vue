@@ -1,58 +1,103 @@
-<template>
-  <table class="table is-striped is-narrow is-fullwidth">
-    <tr>
-      <th class="has-text-centered">Pilot</th>
-      <th class="has-text-centered">Current Location</th>
-      <th class="has-text-centered">Fight hours</th>
-      <th class="has-text-centered">Total Flights</th>
-      <th class="has-text-centered">Average Time per flight</th>
-      <th class="has-text-centered">Last Flight</th>
-    </tr>
-    <tr :class="pilot._decorators._trClasses" v-for="pilot in pilots" :key="pilot.userId">
-      <td>
-        <div class="info-card">
-          <div class="info-card-first-row">
-            {{pilot.name}}
-          </div>
-          <div class="info-card-second-row">
-            <img :src="'/images/ranks/' + pilot._decorators._rankImageCode.code + '.png'" :title="pilot._decorators._rankImageCode.rank" :alt="pilot._decorators._rankImageCode.rank" class="rank-image">
-            <img v-if="pilot.countryCode" :src="'/images/flags/' + pilot.countryCode + '.png'" :alt="pilot.country" :title="pilot.country">
-          </div>
-        </div>
-      </td>
-                <!-- td
-                  .info-card 
-                    .info-card-first-row #{user.name}
-                    .info-card-second-row
-                    img.rank-image(src="/images/ranks/" + user._decorators._rankImageCode.code +".png", alt=user._decorators._rankImageCode.rank)
-                    if user.countryCode
-                      img(src="/images/flags/" + user.countryCode + ".png", alt=user.country, title=user.country)
-                td.has-text-centered
-                  a(href="#", class="location-link", data-lat=user._decorators._location.lat, data-lon=user._decorators._location.lon) #{user.location}
-                td.has-text-centered
-                  i(class="arrow-diff " + user._decorators._diff)
-                  span #{user.hours}
-                td.has-text-centered #{user.flights}
-                td.has-text-centered #{user.minutesPerFlight}
-                td
-                  if user._decorators._lastFlight
-                    .info-card-first-row
-                      a.route-link(href="#", data-lat=user._decorators._location.lat, data-lon=user._decorators._location.lon, data-prevlat=user._decorators._previousLocation.lat,  data-prevlon=user._decorators._previousLocation.lon) #{user._decorators._lastFlight.origin} - #{user._decorators._lastFlight.destination}
-                    .info-card-second-row
-                      .tag.has-addons 
-                        span.tag.is-light.is-success #{user._decorators._distance}nm
-                        span.tag.is-light.is-primary #{user._decorators._lastFlight.time}
-                        span.tag.is-light.is-info #{user._decorators._lastFlight.fromNow} -->
-    </tr>
-  </table>
+<template src="./pilot-list.html">
 </template>
 
 <script>
 
+import axios from 'axios';
+import { latLng } from 'leaflet';
+import { customIcons } from '../../data/MapHelper';
+
 export default {
-  props: ['pilots'],
-  mounted() {
-    console.log(this.pilots);
+  data() {
+    return {
+      pilots: []
+    }
+  },
+  async mounted() {
+    const { data } = await axios.get('http://gairacalabs.xyz:3100/api/pilots');
+    const { pilots, lastUpdated, version } = data;
+    this.pilots = pilots;
+    console.log('this.pilots :>> ', this.pilots);
+  },
+  methods: {
+    feedItemIcon(pilot) {
+      try {
+        return require(`../../assets/img/ranks/${pilot._decorators._rankImageCode.code}.png`)
+      } catch(err) {
+        console.log(err);
+      }
+    },
+    showRoute(pilot) {
+       const latlng1 = latLng(pilot._decorators._location.lat, pilot._decorators._location.lon);
+       const latlng2 = latLng(pilot._decorators._previousLocation.lat, pilot._decorators._previousLocation.lon);
+        console.log(latlng1, latlng2);
+       this.$emit('show-map', {
+        type: 'route',
+        markers: [{
+          latlng: latlng1,
+          icon: customIcons.iconLanding
+        }, {
+          latlng: latlng2,
+          icon: customIcons.iconTakeoff
+        }],
+        polylines: [{
+          latlngs: [[latlng2.lat, latlng2.lng], [latlng1.lat, latlng1.lng]],
+          color: '#DA53D4',
+          weight: 1,
+          dashArray: '6 3 2 3'
+        }]
+      });
+    },
+    showLocation(pilot) {
+      const latlng = latLng(pilot._decorators._location.lat, pilot._decorators._location.lon);
+      this.$emit('show-map', {
+        type: 'location',
+        markers: [{
+          latlng,
+          icon: customIcons.iconHere
+        }]
+      });
+    }
   }
 }
 </script>
+
+<style lang="scss">
+
+.rank-image {
+    width: 28px;
+    margin-right: 4px;
+}
+.info-card {
+    &-first-row{
+        font-size: 15px;
+        font-weight: 600;
+    }
+    &-second-row{
+        .tag{
+            font-weight: 400;
+        }
+    }
+}
+
+.danger {
+    background-color: #FEFFEC !important;
+}
+
+.arrow-diff {
+    margin-right: 5px;
+
+    &.fa {
+        font-size: 12px;
+    }
+    &.diff-stable {
+        color: #e8e8e8;
+    }
+    &.diff-up {
+        color: green;
+    }
+    &.diff-down {
+        color: red;
+    }
+}
+</style>

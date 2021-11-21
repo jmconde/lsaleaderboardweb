@@ -1,40 +1,51 @@
 <template>
   <div id="app">
-    <Header />
-    <div class="nav">
-      <router-link to="/">Home</router-link>|<router-link to="/leaderboard"
-        >About</router-link
-      >
-    </div>
-    <router-view />
+    <Header></Header>
+    <!-- <div class="nav">
+      <router-link to="/">Home</router-link>|<router-link to="/leaderboard">About</router-link>
+    </div> -->
+    <router-view></router-view>
+    <Footer :version="'2.0.0-beta.1'" last-updated=""></Footer>
   </div>
 </template>
 <script>
 import Header from './components/Header/Header.vue';
+import Footer from './components/Footer/Footer.vue';
 
 export default {
   components: {
-    Header
-  }
+    Header,
+    Footer
+  },
+  mounted() {
+    console.log(process.env.ROOT_API)
+  },
 }
 </script>
 
 <style lang="scss">
-  @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,500;1,300&display=swap');
-  @import '../node_modules/bulma/sass/base/_all.sass';
-  @import '../node_modules/bulma/sass/utilities/_all';
-  @import "../node_modules/bulma/sass/components/modal.sass";
-  @import "../node_modules/bulma/sass/elements/box.sass";
-  @import "../node_modules/bulma/sass/elements/container.sass";
-  @import "../node_modules/bulma/sass/elements/table.sass";
-  @import "../node_modules/bulma/sass/elements/tag.sass";
-  @import "../node_modules/bulma/sass/layout/section.sass";
-  @import "../node_modules/bulma/sass/layout/footer.sass";
-  // dashbboard
-  @import "../node_modules/bulma/sass/grid/_all.sass";
+  $box-shadow: 1px 1px 1px 0 #eee;
+  $box-padding: 8px;
 
+  @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,500;1,300&display=swap');
+  // @import '../node_modules/bulma/sass/base/_all.sass';
+  // @import '../node_modules/bulma/sass/utilities/_all';
+  // @import '../node_modules/bulma/sass/helpers/_all';
+  // @import "../node_modules/bulma/sass/components/level.sass";
+  // @import "../node_modules/bulma/sass/components/media.sass";
+  // @import "../node_modules/bulma/sass/components/modal.sass";
+  // @import "../node_modules/bulma/sass/elements/box.sass";
+  // @import "../node_modules/bulma/sass/elements/container.sass";
+  // @import "../node_modules/bulma/sass/elements/table.sass";
+  // @import "../node_modules/bulma/sass/elements/tag.sass";
+  // @import "../node_modules/bulma/sass/elements/title.sass";
+  // @import "../node_modules/bulma/sass/layout/section.sass";
+  // @import "../node_modules/bulma/sass/layout/footer.sass";
+  // // dashbboard
+  // @import "../node_modules/bulma/sass/grid/_all.sass";
+  @import '~bulma/bulma';
   :root {
-    --font: Roboto, sans-serif;
+    --font: 'Open Sans', sans-serif;
     --textColor: #374961;
     --linkActiveColor: #41b783;
   }

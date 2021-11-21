@@ -1,3 +1,7 @@
+
+require('dotenv').config()
+ 
+const  webpack = require('webpack');
 const { VueLoaderPlugin } = require('vue-loader');
 const path = require('path');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
@@ -83,6 +87,7 @@ module.exports = {
       favicon: "./public/favicon.ico",
     }),
     new CleanWebpackPlugin(),
+    new webpack.EnvironmentPlugin(['ROOT_API']),
   ],
   resolve: {
     alias: {
