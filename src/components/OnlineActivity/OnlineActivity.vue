@@ -4,7 +4,7 @@
     <div class="media" v-for="d in data" :key="d.user_id">
       <figure class="media-left">
         <p class="image is-32x32">
-          <img :src="d.user.avatar" :alt="d.user.name" width="32" />
+          <img class="is-rounded" :src="d.user.avatar" :alt="d.user.name" width="32" />
         </p>
       </figure>
       <div class="media-content">
@@ -32,8 +32,7 @@ export default {
     }
   },
   async mounted() {
-    const { data } = await axios.get('http://gairacalabs.xyz:3100/api/acars');
-    console.log('data :>> ', data);
+    const { data } = await axios.get(`${process.env.ROOT_API}/acars`);
     this.data = data.data;
   }
 }

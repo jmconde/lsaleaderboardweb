@@ -6,7 +6,8 @@
   "scripts": {
     "build": "webpack --mode production",
     "start": "webpack-dev-server --mode development",
-    "serve": "npm run build && http-server ./dist -c-1"
+    "serve": "npm run build && http-server ./dist -c-1",
+    "deploy": "docker build  -t arhuako/lsadashboardweb ."
   },
   "author": "",
   "license": "ISC",

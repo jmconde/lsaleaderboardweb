@@ -14,7 +14,7 @@ export default {
     }
   },
   async mounted() {
-    const { data } = await axios.get('http://gairacalabs.xyz:3100/api/pilots');
+    const { data } = await axios.get(`${process.env.ROOT_API}/pilots`);
     const { pilots, lastUpdated, version } = data;
     this.pilots = pilots;
     console.log('this.pilots :>> ', this.pilots);
