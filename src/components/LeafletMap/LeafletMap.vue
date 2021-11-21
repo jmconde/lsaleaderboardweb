@@ -1,6 +1,6 @@
 <template>
   <div id="map-modal" class="modal" :class="{ 'is-active': mutatedShow }">
-    <div class="modal-background"></div>
+    <div class="modal-background" @click="closeMap"></div>
     <div class="modal-content">
       <div id="map-container">
         <l-map v-if="this.x" ref="map" @ready="doSomethingOnReady()">
@@ -78,6 +78,12 @@ export default {
 }
 </script>
 <style lang="scss">
+  @media screen and (min-width: 769px){
+    #map-modal .modal-content {
+      width: 80vw !important;
+    }
+  }
+  
   #map-container {
       height: 80vh;
   }
