@@ -53,6 +53,15 @@ module.exports = {
         },
       },
       {
+        test: /\.(json)$/,
+        loader: "file-loader",
+        options: {
+          name: "[name][contenthash:8].[ext]",
+          outputPath: "assets/lottie",
+          esModule: false,
+        },
+      },
+      {
         test: /\.s?css$/,
         use: [
           "style-loader",
@@ -87,7 +96,7 @@ module.exports = {
       favicon: "./public/favicon.ico",
     }),
     new CleanWebpackPlugin(),
-    new webpack.EnvironmentPlugin(['ROOT_API']),
+    new webpack.EnvironmentPlugin(['ROOT_API', 'STATICS_HOST']),
   ],
   resolve: {
     alias: {

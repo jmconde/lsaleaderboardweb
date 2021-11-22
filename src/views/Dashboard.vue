@@ -10,12 +10,15 @@
        />
     <div class="columns">
       <div class="column">
-        <PilotsList 
-          @show-map="mapData"/>
+        <Widget>
+          <PilotsList @show-map="mapData"/>
+        </Widget>
       </div>
       <div class="column is-narrow">
         <div style="min-width: 350px">
-          <OnlineActivity />
+          <Widget animation-path="http://localhost:3100/lottie/loading-dots-blue.json">
+            <OnlineActivity />
+          </Widget>
         </div>
       </div>
     </div>
@@ -54,6 +57,7 @@ import Header from '../components/Header/Header.vue';
 import OnlineActivity from '../components/OnlineActivity/OnlineActivity.vue';
 import PilotsList from '../components/PilotsList/PilotsList.vue';
 import LeafletMap from '../components/LeafletMap/LeafletMap.vue';
+import Widget from '../components/Widget.vue';
 
 export default{
   data() {
@@ -69,6 +73,15 @@ export default{
     OnlineActivity,
     PilotsList,
     LeafletMap,
+    Widget,
+  },
+  mounted() {
+    console.log(process.env.STATICS_HOST);
+  },
+  computed:{
+    staticsHost() {
+      return process.env.STATICS_HOST || '';
+    }
   },
   methods: {
     modalClosed() {

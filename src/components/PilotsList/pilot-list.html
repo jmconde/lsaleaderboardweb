@@ -24,7 +24,7 @@
         <a href="#" @click="showLocation(pilot)" class="location-link">{{pilot.location}}</a>
       </td>
       <td class="has-text-centered">
-        <i :class="'arrow-diff ' + pilot._decorators._diff"></i>
+        <font-awesome-icon v-if="pilot.seconds" :icon="getCaretIcon(pilot._decorators._diff)" :class="getCaretClass(pilot._decorators._diff)" />
         <span>{{pilot.hours}}</span>
       </td>
       <td class="has-text-centered">{{pilot.flights}}</td>

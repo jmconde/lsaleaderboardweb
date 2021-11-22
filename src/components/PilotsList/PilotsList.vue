@@ -6,20 +6,38 @@
 import axios from 'axios';
 import { latLng } from 'leaflet';
 import { customIcons } from '../../data/MapHelper';
+import WidgetContentMixin from '../../mixins/WidgetContentMixin';
 
 export default {
+  props:{
+    id: String
+  },
   data() {
     return {
       pilots: []
     }
   },
   async mounted() {
-    const { data } = await axios.get(`${process.env.ROOT_API}/pilots`);
-    const { pilots, lastUpdated, version } = data;
-    this.pilots = pilots;
-    console.log('this.pilots :>> ', this.pilots);
+    await this.loadData();
+    this.widgetInitialized();
   },
+  mixins: [ WidgetContentMixin ],
   methods: {
+    async loadData() {
+      console.log('this.$parent :>> ', this.$parent);
+      this.widgetLoading();
+      this.$emit('loading', { id: this.id });
+      try {
+        const { data } = await axios.get(`${process.env.ROOT_API}/pilots`);
+        const { pilots, lastUpdated, version } = data;
+        this.pilots = pilots;
+        this.widgetLoaded();
+        console.log('this.pilots :>> ', this.pilots);
+      } catch(err){
+        this.widgetFailed();
+      }
+      
+    },
     feedItemIcon(pilot) {
       try {
         return require(`../../assets/img/ranks/${pilot._decorators._rankImageCode.code}.png`)
@@ -57,6 +75,16 @@ export default {
           icon: customIcons.iconHere
         }]
       });
+    },
+    getCaretIcon(diff) {
+      if (diff < 0) return 'caret-up';
+      else if (diff > 0) return 'caret-down';
+      else return 'caret-right';
+    },
+    getCaretClass(diff) {
+      if (diff < 0) return 'has-text-success';
+      else if (diff > 0) return 'has-text-danger';
+      else return 'has-text-grey-lighter';
     }
   }
 }

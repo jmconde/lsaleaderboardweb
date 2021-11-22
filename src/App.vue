@@ -17,15 +17,13 @@ export default {
     Header,
     Footer
   },
-  mounted() {
-    console.log(process.env.ROOT_API)
-  },
 }
 </script>
 
 <style lang="scss">
   $box-shadow: 1px 1px 1px 0 #eee;
-  $box-padding: 8px;  
+  $box-padding: 8px;
+  $body-font-size: 0.8em;
 
   @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,500;1,300&display=swap');
   // @import '../node_modules/bulma/sass/base/_all.sass';

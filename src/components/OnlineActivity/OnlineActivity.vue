@@ -1,6 +1,6 @@
 <template>
   <div class="notification">
-    <h5 class="title is-5">Realtime activity</h5>
+    <h6 class="title is-6">Pilots Online</h6>
     <div class="media" v-for="d in data" :key="d.user_id">
       <figure class="media-left">
         <p class="image is-32x32">
@@ -8,32 +8,70 @@
         </p>
       </figure>
       <div class="media-content">
-        <div class="level">
-          <div class="has-text-left">
-            <div class="is-size-6 has-text-left has-text-weight-semibold">{{d.user.name}}</div>
-            <span class="tag is-dark">{{d.status_text}}</span>
-          </div>
-          <div>
-            <div class="has-text-right is-size-7">{{d.dpt_airport_id}} - {{d.arr_airport_id}}</div>
-          </div>
+        <div class="level mb-1">
+            <div class="is-size-6 has-text-left has-text-weight-semibold">{{d.user.name}} </div>
+          <div class="is-size-7">{{d.airline.icao}}{{d.flight_number}} </div>
         </div>
+         <div class="level mb-0">
+            <div class="is-size-4 has-text-weight-light">{{d.dpt_airport_id}}</div>
+            <progress class="progress is-small mb-0 mt-0 ml-1 mr-1" :value="percentageCompleted(d.planned_distance.nmi, d.distance.nmi)" max="100">{{round(d.distance.nmi)}} - {{round(d.planned_distance.nmi)}}</progress>
+           <div class="is-size-4 has-text-weight-light">{{d.arr_airport_id}}</div>
+         </div>        
+
+        <div class="level mb-0">
+          <span class="is-size-7 is-italic">{{d.status_text}}</span>
+          <div class="is-size-7 has-text-weight-semibold"><small>{{round(d.distance.nmi)}}nm / {{round(d.planned_distance.nmi)}}nm</small></div>
+          <span class="is-size-7 is-italic">{{d.route}}</span>
+        </div>
+
+        
       </div>
     </div>
   </div>
 </template>
 
+<style lang="scss">
+  
+</style>
+
 <script>
 import axios from 'axios';
+import WidgetContentMixin from '../../mixins/WidgetContentMixin';
 
 export default {
   data() {
     return {
-      data: null
+      data: null,
+      timeoutId: null,
     }
   },
   async mounted() {
-    const { data } = await axios.get(`${process.env.ROOT_API}/acars`);
-    this.data = data.data;
+    await this.loadData();
+    this.widgetInitialized();
+  },
+  mixins: [WidgetContentMixin],
+  methods: {
+    loop() {
+      clearTimeout(this.timeoutId);
+      this.timeoutId = setTimeout(this.loadData, 10000);
+    },
+    round(num) {
+      return Math.round(num);
+    },
+    percentageCompleted(xt, x) {
+      return Math.round((x * 100) / xt);
+    },
+    async loadData() {
+      this.widgetLoading();
+      try {
+        const { data } = await axios.get(`${process.env.ROOT_API}/acars`);
+        this.widgetLoaded();
+        this.data = data.data;
+        this.loop();
+      } catch(err) {
+        this.widgetFailed();
+      }
+    }
   }
 }
 </script>
