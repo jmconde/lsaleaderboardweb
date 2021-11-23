@@ -16,9 +16,12 @@
       </div>
       <div class="column is-narrow">
         <div style="min-width: 350px">
-          <Widget animation-path="http://localhost:3100/lottie/loading-dots-blue.json">
-            <OnlineActivity />
+          <Widget>
+            <OnlineActivity></OnlineActivity>
           </Widget>
+          <!-- <Widget>
+            <LineChart></LineChart>
+          </Widget> -->
         </div>
       </div>
     </div>
@@ -58,6 +61,7 @@ import OnlineActivity from '../components/OnlineActivity/OnlineActivity.vue';
 import PilotsList from '../components/PilotsList/PilotsList.vue';
 import LeafletMap from '../components/LeafletMap/LeafletMap.vue';
 import Widget from '../components/Widget.vue';
+import LineChart from '../components/LineChart/LineChart.vue';
 
 export default{
   data() {
@@ -74,6 +78,7 @@ export default{
     PilotsList,
     LeafletMap,
     Widget,
+    LineChart
   },
   mounted() {
     console.log(process.env.STATICS_HOST);

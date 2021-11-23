@@ -16,12 +16,14 @@ export default {
   props: {
     animationPath: {
       type: String,
-      default: 'http://localhost:3100/lottie/loading-colour.json'
+      default() {
+        return `${process.env.STATICS_HOST}/lottie/loading-colour.json`
+      }
     }
   },
   data() {
     return {
-      id: crypto.randomUUID(),
+      id: this.uuid(),
       loading: true,
       error: false,
       initialized: false
@@ -46,6 +48,12 @@ export default {
     handleFailed() {
       this.error = true;
     },
+    uuid() {
+      return 'xxxx-xxxx-xxx-xxxx'.replace(/[x]/g, (c) => {  
+        const r = Math.floor(Math.random() * 16);  
+        return r.toString(16);  
+      });  
+    }
   },
   components: {
     LottieAnimation

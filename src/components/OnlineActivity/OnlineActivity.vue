@@ -27,6 +27,10 @@
         
       </div>
     </div>
+    <div v-if="!data.length">
+      <LottieAnimation :width="100" :height="100" :path="`${animationBasePath}/lottie/radar.json`"></LottieAnimation>
+      <p>Skies are empty,<br>searching for new flights...</p> 
+    </div>
   </div>
 </template>
 
@@ -37,11 +41,12 @@
 <script>
 import axios from 'axios';
 import WidgetContentMixin from '../../mixins/WidgetContentMixin';
+import LottieAnimation from '../LottieAnimation.vue';
 
 export default {
   data() {
     return {
-      data: null,
+      data: [],
       timeoutId: null,
     }
   },
@@ -50,6 +55,11 @@ export default {
     this.widgetInitialized();
   },
   mixins: [WidgetContentMixin],
+  computed: {
+    animationBasePath() {
+      return process.env.STATICS_HOST;
+    }
+  },
   methods: {
     loop() {
       clearTimeout(this.timeoutId);
@@ -72,6 +82,9 @@ export default {
         this.widgetFailed();
       }
     }
+  },
+  components: {
+    LottieAnimation
   }
 }
 </script>
