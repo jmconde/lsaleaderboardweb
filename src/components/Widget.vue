@@ -1,5 +1,5 @@
 <template>
-  <div :id="id" @loading="handleLoading">
+  <div class="widget" :id="id" @loading="handleLoading">
     <LottieAnimation :hidden="initialized" :width="200" :height="200" :path="animationPath"></LottieAnimation>
     <div :hidden="!initialized || error">
       <slot></slot>
@@ -14,6 +14,7 @@
 import LottieAnimation from '../components/LottieAnimation.vue';
 export default {
   props: {
+    height: Number,
     animationPath: {
       type: String,
       default() {
@@ -60,3 +61,10 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+  // .widget {
+  //   overflow-x: hidden;
+  //   overflow-y: auto;
+  // }
+</style>

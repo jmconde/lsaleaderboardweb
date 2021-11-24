@@ -8,50 +8,36 @@
       :polylines="polylines"
       @modal-closed="modalClosed"
        />
-    <div class="columns">
-      <div class="column">
-        <Widget>
-          <PilotsList @show-map="mapData"/>
-        </Widget>
-      </div>
-      <div class="column is-narrow">
-        <div style="min-width: 350px">
-          <Widget>
-            <OnlineActivity></OnlineActivity>
-          </Widget>
-          <!-- <Widget>
-            <LineChart></LineChart>
-          </Widget> -->
+  
+    <div id="dashboard" class="container">
+      <section class="section">
+        <div class="tile is-ancestor">
+          <div class="tile is-parent">
+            <div class="tile is-child">
+              <h5 class="title is-5">Online Pilots</h5>
+                <div>
+                  <Widget :height="500">
+                    <PilotsList @show-map="mapData"/>
+                  </Widget>
+                </div>
+            </div>
+          </div>
+          <div class="tile is-parent is-vertical is-4">
+            <div class="tile is-child">
+                
+                <Widget>
+                  <LineChart height="250"></LineChart>
+                </Widget>
+                
+                <Widget>
+                  <OnlineActivity></OnlineActivity>
+                </Widget>
+            </div>
+          </div>
         </div>
-      </div>
+      </section>
     </div>
   </div>
-  
-   <!-- <div id="dashboard" class="container">
-     <section class="section">
-       <div class="tile is-ancestor">
-         <div class="tile is-parent">
-           <div class="tile is-child box">
-             <h5 class="title is-5">Online Pilots</h5>
-              <div>
-                <PilotsList />
-              </div>
-           </div>
-         </div>
-         <div class="tile is-parent is-vertical is-4">
-           <div class="tile is-child box">
-             <h5 class="title is-5">Panel 2</h5>
-             <div>
-                <OnlineActivity />
-             </div>
-           </div>
-           <div class="tile is-child box">
-             <h5 class="title is-5">Panel 3</h5>
-            </div>
-         </div>
-       </div>
-     </section>
-   </div> -->
 </template>
 
 <script>
@@ -69,7 +55,8 @@ export default{
       mapType: 'location',
       showMap: false,
       markers: [],
-      polylines: []
+      polylines: [],
+      version: window.__GLOBALS.version
     }
   },
   components: {
@@ -106,6 +93,3 @@ export default{
   }
 }
 </script>
-
-<style lang="scss">
-</style>

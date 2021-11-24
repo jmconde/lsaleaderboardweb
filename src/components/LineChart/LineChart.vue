@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h6 class="title is-6 mb-1">Flights this month</h6>
     <apexchart
       type="line"
       height="250"
@@ -14,6 +15,12 @@ import WidgetContentMixin from '../../mixins/WidgetContentMixin';
 import axios from 'axios';
 
 export default {
+  props: {
+    height: {
+      type: Number,
+      default: 300
+    }
+  },
   components: {
     apexchart: VueApexCharts,
   },
@@ -25,15 +32,18 @@ export default {
   data() {
     return {
       data: [],
-      series: [
-        {
-          name: "Desktops",
-          data: [10, 41, 35, 51, 49, 62, 69, 91, 148],
-        },
-      ],
-      chartOptions: {
+      // series: [
+      //   {
+      //     name: "Desktops",
+      //     data: [10, 41, 35, 51, 49, 62, 69, 91, 148],
+      //   },
+      // ],
+      baseChartOptions: {
         chart: {
-          height: 350,
+          toolbar: {
+          show: false
+        },
+          height: this.height,
           type: "line",
           zoom: {
             enabled: false,
@@ -44,15 +54,11 @@ export default {
         },
         stroke: {
           curve: "smooth",
-          dashArray: '20 5 10 5',
+          // dashArray: '20 5 10 5',
           width: 2
         },
         markers: {
           size: 0
-        },
-        title: {
-          text: "Product Trends by Month",
-          align: "left",
         },
         fill: {
           type: 'gradient'
@@ -64,20 +70,27 @@ export default {
           },
         },
         xaxis: {
-          categories: [
-            "Jan",
-            "Feb",
-            "Mar",
-            "Apr",
-            "May",
-            "Jun",
-            "Jul",
-            "Aug",
-            "Sep",
-          ],
+          categories: [],
         },
       },
     };
+  },
+  computed: {
+    series() {
+      const series = [{
+        name: "Flights",
+        data: this.data.map(d => d.flights),
+      }];
+      console.log('series :>> ', series);
+      return series;
+    },
+    chartOptions() {
+      const xaxis = {
+         categories: this.data.map(d => d.day)
+      };
+      console.log('xaxis :>> ', xaxis);;
+      return {...this.baseChartOptions, ...{ xaxis } }
+    }
   },
   methods: {
     getCategories() {
@@ -88,11 +101,14 @@ export default {
       try {
         const { data } = await axios.get(`${process.env.ROOT_API}/daily-total-data`);
         this.data = data;
+        // console.log(data.map());
         this.widgetLoaded();
-        console.log(data
-        );
+
+        window.dispatchEvent(new Event('resize'));
+        console.log(data);
       } catch(err) {
         this.widgetFailed();
+        console.log(err);
       }
     }
   },

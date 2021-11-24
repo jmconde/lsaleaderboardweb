@@ -1,13 +1,13 @@
 {
   "name": "lsadashboard",
-  "version": "2.1.0",
+  "version": "2.2.0-beta.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "build": "webpack --mode production",
     "start": "webpack-dev-server --mode development",
     "serve": "npm run build && http-server ./dist -c-1",
-    "deploy": "node ./tools/versioning && docker build  -t arhuako/lsadashboardweb ."
+    "deploy": "node ./tools/versioning && node ./tools/addglobals && docker build  -t arhuako/lsadashboardweb ."
   },
   "author": "",
   "license": "ISC",

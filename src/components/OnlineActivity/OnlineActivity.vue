@@ -1,6 +1,6 @@
 <template>
   <div class="notification">
-    <h6 class="title is-6">Pilots Online</h6>
+    <h6 class="title is-6">Online Pilots</h6>
     <div class="media" v-for="d in data" :key="d.user_id">
       <figure class="media-left">
         <p class="image is-32x32">
