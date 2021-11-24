@@ -14,7 +14,7 @@
         <div class="tile is-ancestor">
           <div class="tile is-parent">
             <div class="tile is-child">
-              <h5 class="title is-5">Online Pilots</h5>
+              <h6 class="title is-6">All time pilots ranking</h6>
                 <div>
                   <Widget :height="500">
                     <PilotsList @show-map="mapData"/>
