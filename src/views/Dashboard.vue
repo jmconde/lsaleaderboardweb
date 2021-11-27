@@ -14,15 +14,41 @@
         <div class="tile is-ancestor">
           <div class="tile is-parent">
             <div class="tile is-child">
-              <h6 class="title is-6">All time pilots ranking</h6>
-                <div>
-                  <Widget :height="500">
-                    <PilotsList @show-map="mapData"/>
-                  </Widget>
-                </div>
+              <Widget>
+                <LineChart :height="250"></LineChart>
+              </Widget>
             </div>
           </div>
-          <div class="tile is-parent is-vertical is-4">
+          <div class="tile is-parent">
+            <div class="tile is-child">
+              <Widget>
+                <BarChart :height="250"></BarChart>
+              </Widget>
+            </div>
+          </div>
+        </div>
+        <div class="tile is-ancestor">
+          <div class="tile is-parent">
+            <div class="tile is-child">
+              <Widget :height="500">
+                <PilotsList @show-map="mapData"/>
+              </Widget>
+            </div>
+          </div>
+          <div class="tile is-parent is-4">
+            <div class="tile is-child">
+              <Widget>
+                <OnlineActivity></OnlineActivity>
+              </Widget>
+            </div>
+          </div>
+        </div>
+            <!-- <div class="tile is-child">
+              <h6 class="title is-6">All time ranking</h6>
+              <div>
+              </div>
+            </div> -->
+          <!-- <div class="tile is-parent is-vertical is-4">
             <div class="tile is-child">
                 
                 <Widget>
@@ -33,8 +59,7 @@
                   <OnlineActivity></OnlineActivity>
                 </Widget>
             </div>
-          </div>
-        </div>
+          </div> -->
       </section>
     </div>
   </div>
@@ -48,6 +73,7 @@ import PilotsList from '../components/PilotsList/PilotsList.vue';
 import LeafletMap from '../components/LeafletMap/LeafletMap.vue';
 import Widget from '../components/Widget.vue';
 import LineChart from '../components/LineChart/LineChart.vue';
+import BarChart from '../components/BarChart/BarChart.vue';
 
 export default{
   data() {
@@ -65,7 +91,8 @@ export default{
     PilotsList,
     LeafletMap,
     Widget,
-    LineChart
+    LineChart,
+    BarChart
   },
   mounted() {
     console.log(process.env.STATICS_HOST);

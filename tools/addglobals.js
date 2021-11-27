@@ -4,7 +4,6 @@ const path = require('path');
 const pkg = require('../package.json');
 const filepath = path.join(process.cwd(), 'public', 'index.html');
 let content = fs.readFileSync(filepath, 'utf-8');
-console.log(content);
 
 const globals = {
   version: pkg.version

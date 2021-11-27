@@ -1,7 +1,7 @@
 <template>
   <div>
     <apexchart
-      type="line"
+      type="treemap"
       height="250"
       :options="chartOptions"
       :series="series"
@@ -37,53 +37,41 @@ export default {
           toolbar: {
             show: false,
           },
+          type: "treemap",
           height: this.height,
-          type: "line",
-          zoom: {
-            enabled: false,
-          },
         },
         title: {
-          text: 'This month flights by Day',
+          text: 'This month flights by pilot',
           align: 'center',
           margin: 0,
           style: {
             fontSize: '16px'
           },
         },
-        dataLabels: {
-          enabled: false,
-        },
-        stroke: {
-          curve: "smooth",
-          // dashArray: '20 5 10 5',
-          width: 3,
-        },
-        markers: {
-          size: 0,
+        legend: {
+          show: false,
         },
         fill: {
-          type: "gradient",
+          type: 'solid',
         },
-        grid: {
-          row: {
-            colors: ["#f3f3f3", "transparent"], // takes an array which will be repeated on columns
-            opacity: 0.5,
+        dataLabels: {
+          dropShadow: {
+            enabled: false
           },
-        },
-        yaxis: {
-          show: true,
-          axisBorder: {
-            show: false
+          style: {
+            colors: ['#fff']
           },
-          labels: {
-            style: {
-              fontFamily: 'Open Sans, sans-serif'
-            }
-          }
+          formatter: function (val, opts) {
+            const max = opts.w.config.series[0].data[0].y;
+            const cut = Math.ceil(max * .2);
+            return opts.value > cut ? [val, opts.value] : '';
+         }
         },
-        xaxis: {
-          categories: []
+        colors: ['#5C94A7'],
+        plotOptions: {
+          treemap: {
+            enableShades: true,
+          },
         },
       },
     };
@@ -92,22 +80,20 @@ export default {
     series() {
       const series = [
         {
-          name: "Flights",
-          data: this.data.map((d) => d.count),
+          data: this.data.map((d) => ({
+            x: d.name,
+            y: d.count,
+          })),
         },
       ];
       return series;
     },
     chartOptions() {
-      const xaxis = {
-        categories: this.data.map((d) => d.day),
-        tickAmount: 15,
-        tooltip: {
-          enabled: false
-        },
-        floating: false
-      };
-      return { ...this.baseChartOptions, ...{ xaxis } };
+      // const xaxis = {
+      //   categories: this.data.map((d) => d.name),
+      // };
+      // console.log("xaxis :>> ", xaxis);
+      return { ...this.baseChartOptions };
     },
   },
   methods: {
@@ -120,11 +106,14 @@ export default {
         const { data } = await axios.get(
           `${
             process.env.ROOT_API
-          }/monthly-flights-by-day/${new Date().getMonth()}`
+          }/monthly-flights-by-pilot/${new Date().getMonth()}`
         );
         this.data = data;
+        // console.log(data.map());
         this.widgetLoaded();
+
         window.dispatchEvent(new Event("resize"));
+        console.log(data);
       } catch (err) {
         this.widgetFailed();
         console.log(err);
