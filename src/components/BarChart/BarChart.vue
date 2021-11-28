@@ -12,8 +12,29 @@
 import VueApexCharts from "vue-apexcharts";
 import WidgetContentMixin from "../../mixins/WidgetContentMixin";
 import axios from "axios";
+import gql from 'graphql-tag';
 
 export default {
+  apollo: {
+    data: {
+      query: gql`query ByDayPilot($month: Int!) {
+        monthlyFlightsByPilot(month: $month) {
+          x
+          y
+        }
+      }`,
+      result() {
+        this.widgetInitialized();
+      },
+      variables() {
+        return  {
+          month: this.month
+        };
+      },
+      update: data => data.monthlyFlightsByPilot,
+      pollInterval: 15*60*60
+    }
+  },
   props: {
     height: {
       type: Number,
@@ -23,13 +44,10 @@ export default {
   components: {
     apexchart: VueApexCharts,
   },
-  async mounted() {
-    await this.loadData();
-    this.widgetInitialized();
-  },
   mixins: [WidgetContentMixin],
   data() {
     return {
+      month: new Date().getMonth(),
       data: [],
       baseChartOptions: {
         chart: {
@@ -80,10 +98,7 @@ export default {
     series() {
       const series = [
         {
-          data: this.data.map((d) => ({
-            x: d.name,
-            y: d.count,
-          })),
+          data: this.data,
         },
       ];
       return series;

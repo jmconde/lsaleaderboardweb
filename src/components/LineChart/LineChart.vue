@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div v-if="$apollo.queries.data.loading">
+      <h1>Loading {{loading}}</h1>
+    </div>
     <apexchart
       type="line"
       height="250"
@@ -12,8 +15,31 @@
 import VueApexCharts from "vue-apexcharts";
 import WidgetContentMixin from "../../mixins/WidgetContentMixin";
 import axios from "axios";
+import gql from 'graphql-tag';
 
 export default {
+  apollo: {
+    $loadingKey: 'loading',
+    data: {
+      loading: 0,
+      query: gql`query ByDayQuery($month: Int!) {
+        monthlyFlightsByDay(month: $month) {
+          x
+          y
+        }
+      }`,
+      result() {
+        this.widgetInitialized();
+      },
+      variables() {
+        return  {
+          month: this.month
+        };
+      },
+      update: data => data.monthlyFlightsByDay,
+      pollInterval: 5000
+    }
+  },
   props: {
     height: {
       type: Number,
@@ -23,13 +49,11 @@ export default {
   components: {
     apexchart: VueApexCharts,
   },
-  async mounted() {
-    await this.loadData();
-    this.widgetInitialized();
-  },
   mixins: [WidgetContentMixin],
   data() {
     return {
+      loading: 0,
+      month: new Date().getMonth(),
       data: [],
       baseChartOptions: {
         chart: {
@@ -93,14 +117,14 @@ export default {
       const series = [
         {
           name: "Flights",
-          data: this.data.map((d) => d.count),
+          data: this.data.map((d) => d.y),
         },
       ];
       return series;
     },
     chartOptions() {
       const xaxis = {
-        categories: this.data.map((d) => d.day),
+        categories: this.data.map((d) => d.x),
         tickAmount: 15,
         tooltip: {
           enabled: false
@@ -109,6 +133,16 @@ export default {
       };
       return { ...this.baseChartOptions, ...{ xaxis } };
     },
+    isLoading() {
+      if (!this.$apollo.queries.data) return this.$apollo.loading;
+      return this.$apollo.queries.data.loading;
+    }
+  },
+  
+  watch: {
+    isLoading(val) {
+      console.log('isLoading :>>', val);
+    }
   },
   methods: {
     getCategories() {
