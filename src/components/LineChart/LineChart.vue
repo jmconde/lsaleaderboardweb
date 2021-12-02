@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div v-if="$apollo.queries.data.loading">
+    <!-- <div v-if="$apollo.queries.data.loading">
       <h1>Loading {{loading}}</h1>
-    </div>
+    </div> -->
     <apexchart
       type="line"
       height="250"
@@ -18,29 +18,33 @@ import axios from "axios";
 import gql from 'graphql-tag';
 
 export default {
-  apollo: {
-    $loadingKey: 'loading',
-    data: {
-      loading: 0,
-      query: gql`query ByDayQuery($month: Int!) {
-        monthlyFlightsByDay(month: $month) {
-          x
-          y
-        }
-      }`,
-      result() {
-        this.widgetInitialized();
-      },
-      variables() {
-        return  {
-          month: this.month
-        };
-      },
-      update: data => data.monthlyFlightsByDay,
-      pollInterval: 5000
-    }
-  },
+  // apollo: {
+  //   $loadingKey: 'loading',
+  //   data: {
+  //     loading: 0,
+  //     query: gql`query ByDayQuery($month: Int!) {
+  //       monthlyFlightsByDay(month: $month) {
+  //         x
+  //         y
+  //       }
+  //     }`,
+  //     result() {
+  //       this.widgetInitialized();
+  //     },
+  //     variables() {
+  //       return  {
+  //         month: this.month
+  //       };
+  //     },
+  //     update: data => data.monthlyFlightsByDay,
+  //     pollInterval: 25000
+  //   }
+  // },
   props: {
+    data: {
+      type: Array,
+      default: () => [],
+    },
     height: {
       type: Number,
       default: 300,
@@ -50,11 +54,16 @@ export default {
     apexchart: VueApexCharts,
   },
   mixins: [WidgetContentMixin],
+  updated: function () {
+    if(this.data.length > 0) {
+      console.log('xccasdasd');
+      this.widgetInitialized();
+    }
+  },
   data() {
     return {
       loading: 0,
       month: new Date().getMonth(),
-      data: [],
       baseChartOptions: {
         chart: {
           fontFamily: 'Open Sans, sans-serif',
@@ -79,7 +88,7 @@ export default {
           enabled: false,
         },
         stroke: {
-          curve: "smooth",
+          // curve: "smooth",
           // dashArray: '20 5 10 5',
           width: 3,
         },
@@ -114,17 +123,21 @@ export default {
   },
   computed: {
     series() {
+      const data = this.data.map((d) => d.y)
+      data.unshift(0);
       const series = [
         {
           name: "Flights",
-          data: this.data.map((d) => d.y),
+          data,
         },
       ];
       return series;
     },
     chartOptions() {
+      const categories = this.data.map((d) => d.x);
+      categories.unshift('');
       const xaxis = {
-        categories: this.data.map((d) => d.x),
+        categories,
         tickAmount: 15,
         tooltip: {
           enabled: false

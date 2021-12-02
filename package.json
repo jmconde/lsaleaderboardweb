@@ -1,6 +1,6 @@
 {
   "name": "lsadashboard",
-  "version": "2.2.0-beta.2",
+  "version": "2.2.0-beta.3",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -21,6 +21,7 @@
     "clean-webpack-plugin": "^4.0.0",
     "css-loader": "^6.5.1",
     "enquirer": "^2.3.6",
+    "envfile": "^6.17.0",
     "file-loader": "^6.2.0",
     "fs-extra": "^10.0.0",
     "html-webpack-plugin": "^5.5.0",

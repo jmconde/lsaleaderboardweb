@@ -21,8 +21,9 @@
         <div class="level mb-0">
           <span class="is-size-7 is-italic">{{d.status_text}}</span>
           <div class="is-size-7 has-text-weight-semibold"><small>{{round(d.distance.nmi)}}nm / {{round(d.planned_distance.nmi)}}nm</small></div>
-          <span class="is-size-7 is-italic">{{d.route}}</span>
+          <span class="is-size-7 is-italic"></span>
         </div>
+        <p class="is-size-7 has-text-weight-light"><small>{{d.route}}</small></p>
 
         
       </div>

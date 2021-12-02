@@ -1,7 +1,7 @@
 <template>
   <div>
     <apexchart
-      type="treemap"
+      type="bar"
       height="250"
       :options="chartOptions"
       :series="series"
@@ -15,27 +15,31 @@ import axios from "axios";
 import gql from 'graphql-tag';
 
 export default {
-  apollo: {
-    data: {
-      query: gql`query ByDayPilot($month: Int!) {
-        monthlyFlightsByPilot(month: $month) {
-          x
-          y
-        }
-      }`,
-      result() {
-        this.widgetInitialized();
-      },
-      variables() {
-        return  {
-          month: this.month
-        };
-      },
-      update: data => data.monthlyFlightsByPilot,
-      pollInterval: 15*60*60
-    }
-  },
+  // apollo: {
+  //   data: {
+  //     query: gql`query ByDayPilot($month: Int!) {
+  //       monthlyFlightsByPilot(month: $month) {
+  //         x
+  //         y
+  //       }
+  //     }`,
+  //     result() {
+  //       this.widgetInitialized();
+  //     },
+  //     variables() {
+  //       return  {
+  //         month: this.month
+  //       };
+  //     },
+  //     update: data => data.monthlyFlightsByPilot,
+  //     pollInterval: 15*60*60
+  //   }
+  // },
   props: {
+    data: {
+      type: Array,
+      default: () => [],
+    },
     height: {
       type: Number,
       default: 300,
@@ -47,68 +51,76 @@ export default {
   mixins: [WidgetContentMixin],
   data() {
     return {
+      // series: [{
+      //   data: [400, 430, 448, 470, 540, 580, 690, 1100, 1200, 1380]
+      // }],
       month: new Date().getMonth(),
-      data: [],
+      // data: [],
       baseChartOptions: {
         chart: {
+          type: 'bar',
           fontFamily: 'Open Sans, sans-serif',
           toolbar: {
             show: false,
           },
-          type: "treemap",
-          height: this.height,
+          height: 200,
         },
         title: {
-          text: 'This month flights by pilot',
+          text: 'This month flights by Pilot',
           align: 'center',
           margin: 0,
           style: {
             fontSize: '16px'
           },
         },
-        legend: {
-          show: false,
-        },
-        fill: {
-          type: 'solid',
-        },
-        dataLabels: {
-          dropShadow: {
-            enabled: false
-          },
-          style: {
-            colors: ['#fff']
-          },
-          formatter: function (val, opts) {
-            const max = opts.w.config.series[0].data[0].y;
-            const cut = Math.ceil(max * .2);
-            return opts.value > cut ? [val, opts.value] : '';
-         }
-        },
-        colors: ['#5C94A7'],
         plotOptions: {
-          treemap: {
-            enableShades: true,
-          },
+          bar: {
+            borderRadius: 4,
+            horizontal: true,
+          }
+        },
+        // xaxis: {
+        //   categories: ['South Korea', 'Canada', 'United Kingdom', 'Netherlands', 'Italy', 'France', 'Japan',
+        //     'United States', 'China', 'Germany'
+        //   ],
+        // },
+        // title: {
+        //   text: 'This month flights by pilot',
+        //   align: 'center',
+        //   margin: 0,
+        //   style: {
+        //     fontSize: '16px'
+        //   },
+        // },
+        dataLabels: {
+          enabled: false
         },
       },
     };
   },
   computed: {
     series() {
+        console.log('thios.data :>> ', this.data);
       const series = [
         {
-          data: this.data,
+          data: this.data.map((d) => d.y),
         },
       ];
+      console.log('series :>> ', series);
       return series;
     },
     chartOptions() {
-      // const xaxis = {
-      //   categories: this.data.map((d) => d.name),
-      // };
-      // console.log("xaxis :>> ", xaxis);
-      return { ...this.baseChartOptions };
+      const xaxis = {
+        categories: this.data.map((d) => d.x),
+        labels: {
+          formatter: function(val) {
+            console.log(val);
+            return val.toFixed(0);
+          }
+        }
+      };
+      console.log("xaxis :>> ", xaxis);
+      return { ...this.baseChartOptions, ...{ xaxis } };
     },
   },
   methods: {

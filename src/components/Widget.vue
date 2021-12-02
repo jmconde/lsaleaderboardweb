@@ -27,7 +27,7 @@ export default {
       id: this.uuid(),
       loading: true,
       error: false,
-      initialized: false
+      initialized: true
     }
   },
   mounted() {
