@@ -9,7 +9,7 @@
       @modal-closed="modalClosed"
        />
   
-    <div id="dashboard" class="container">{{allMetrics}}
+    <div id="dashboard" class="container">
       <section class="section">
         <div class="columns">
           <div class="column">
