@@ -9,7 +9,7 @@
       @modal-closed="modalClosed"
        />
   
-    <div id="dashboard" class="container">
+    <div id="dashboard" class="container">{{allMetrics}}
       <section class="section">
         <div class="columns">
           <div class="column">
@@ -29,7 +29,7 @@
           </div>
           <div class="column">
             <Widget>
-              <Metric :value="formatTime(getIvaoMetric('_total_time'))" :name="'Total IVAO Time'"></Metric>
+              <Metric :value="formatTime(getIvaoMetric('total_time'))" :name="'Total IVAO Time'"></Metric>
             </Widget>
           </div>
         </div>
@@ -37,14 +37,14 @@
           <div class="tile is-parent">
             <div class="tile is-child">
               <Widget>
-                <LineChart :data="dashboardData.by_day" :height="250"></LineChart>
+                <LineChart :data="flightsByDay" :height="250"></LineChart>
               </Widget>
             </div>
           </div>
           <div class="tile is-parent">
             <div class="tile is-child">
               <Widget>
-                <BarChart :data="dashboardData.by_pilot" :height="250"></BarChart>
+                <BarChart :data="flightsByPilot" :height="250"></BarChart>
               </Widget>
             </div>
           </div>
@@ -102,24 +102,24 @@ import gql from 'graphql-tag';
 
 export default{
   apollo: {
-    dashboardData: {
-      query: gql`query getDashboardData($start: String!, $end: String!) {
-        metrics:getMetrics(start:$start, end:$end) {
+    allMetrics: {
+      query: gql`query getAllMetrics($start: String!, $end: String!) {
+        allMetrics:getMetrics(start:$start, end:$end) {
           metric
           id
-        },
-        ivao_vids: getIvaoVIds{
-          vid
         }
-        by_pilot: monthlyFlightsByPilot(start:$start, end:$end) {
-          x
-          y
-        },
-        by_day: monthlyFlightsByDay(start:$start, end:$end) {
-          x
-          y
+      }`,
+      variables() {
+        return {
+          start: this.start,
+          end: this.end,
         }
-        ivao_metrics: getIvaoMetrics(start:$start, end:$end) {
+      },
+      fetchPolicy: 'no-cache',
+    },
+    ivaoMetrics: {
+      query: gql`query getIvaoMetrics($start: String!, $end: String!) {
+        ivaoMetrics:getIvaoMetrics(start:$start, end:$end) {
           all {
             metric
             id
@@ -133,32 +133,55 @@ export default{
             }
           }
         }
-
       }`,
-      update: data => ({
-        metrics: data.metrics,
-        ivao_vids: data.ivao_vids,
-        by_pilot: data.by_pilot,
-        by_day: data.by_day,
-        ivao_metrics: data.ivao_metrics,
-      }),
       variables() {
         return {
-          date: this.date,
-          unit: this.period,
           start: this.start,
           end: this.end,
         }
-      }
-    }
+      },
+      fetchPolicy: 'no-cache',
+    },
+    flightsByPilot: {
+      query: gql`query getFlightsByPilot ($start: String!, $end: String!) {
+        flightsByPilot: monthlyFlightsByPilot(start:$start, end:$end) {
+          x
+          y
+        }
+      },`,
+      variables() {
+        return {
+          start: this.start,
+          end: this.end,
+        }
+      },
+      fetchPolicy: 'no-cache',
+    },
+    flightsByDay: {
+      query: gql`query getFlightsByDay ($start: String!, $end: String!) {
+        flightsByDay: monthlyFlightsByDay(start:$start, end:$end) {
+          x
+          y
+        }
+      },`,
+      variables() {
+        return {
+          start: this.start,
+          end: this.end,
+        }
+      },
+      fetchPolicy: 'no-cache',
+    },
   },
   data() {
     return {
+      allMetrics: [],
+      ivaoMetrics: [],
+      flightsByPilot: [],
+      flightsByDay: [],
       dashboardData: {},
       period: 'month',
       date: new Date(),
-      start: Vue.moment().startOf('month').toDate(),
-      end: Vue.moment().endOf('month').toDate(),
       mapType: 'location',
       showMap: false,
       markers: [],
@@ -176,23 +199,26 @@ export default{
     BarChart,
     Metric,
   },
-  mounted() {
-    console.log(process.env.STATICS_HOST);
-  },
   computed:{
+    start() {
+       return Vue.moment().startOf('month').format();
+    },
+    end() {
+       return Vue.moment().endOf('month').format();
+    },
     staticsHost() {
       return process.env.STATICS_HOST || '';
-    }
+    },
   },
   methods: {
     getMetric(id) {
-      const obj = this.dashboardData.metrics.find(d => d.id === id);
+      if (!this.allMetrics) return 0;
+      const obj = this.allMetrics.find(d => d.id === id);
       return obj ? obj.metric : NaN;
     },
     getIvaoMetric(id) {
-      console.log('this.dashboardData :>> ', id, this.dashboardData.ivao_metrics.all);
-      if (!this.dashboardData.ivao_metrics) return 0;
-      const obj = this.dashboardData.ivao_metrics.all.find(d => d.id === id);
+      if (!this._.has(this.ivaoMetrics, 'all') ) return 0;
+      const obj = this.ivaoMetrics.all.find(d => d.id === id);
       return obj ? obj.metric : NaN;
     },
     modalClosed() {
@@ -201,13 +227,11 @@ export default{
       this.showMap = false;
     },
     mapData(data) {
-      console.log('data :>> ', data);
       const { markers, polylines, type } = data;
       this.markers = markers;
       this.polylines = polylines;
       this.showMap = true;
       this.mapType = type;
-      console.log('showing map');
     },
     formatTime(value) {
       const hours = Math.floor(value / 60);

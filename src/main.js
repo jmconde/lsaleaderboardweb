@@ -2,6 +2,8 @@ import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
 import VueApollo from "vue-apollo";
+import VueLodash from 'vue-lodash';
+import lodash from 'lodash'
 // import vueCompositionApi from "@vue/composition-api";
 import { library } from '@fortawesome/fontawesome-svg-core';
 import VueMoment from 'vue-moment'
@@ -22,7 +24,7 @@ const cache = new InMemoryCache();
 
 const apolloClient = new ApolloClient({
   link,
-  cache
+  cache,
 });
 
 library.add(faCaretUp);
@@ -34,7 +36,7 @@ Vue.component('font-awesome-icon', FontAwesomeIcon)
 // Vue.use(vueCompositionApi);
 Vue.use(VueMoment);
 Vue.use(VueApollo);
-
+Vue.use(VueLodash, { lodash });
 const apolloProvider = new VueApollo({
   defaultClient: apolloClient,
 })

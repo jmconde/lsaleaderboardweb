@@ -100,13 +100,11 @@ export default {
   },
   computed: {
     series() {
-        console.log('thios.data :>> ', this.data);
       const series = [
         {
           data: this.data.map((d) => d.y),
         },
       ];
-      console.log('series :>> ', series);
       return series;
     },
     chartOptions() {
@@ -114,12 +112,10 @@ export default {
         categories: this.data.map((d) => d.x),
         labels: {
           formatter: function(val) {
-            console.log(val);
             return val.toFixed(0);
           }
         }
       };
-      console.log("xaxis :>> ", xaxis);
       return { ...this.baseChartOptions, ...{ xaxis } };
     },
   },
