@@ -103,19 +103,19 @@ import gql from 'graphql-tag';
 export default{
   apollo: {
     dashboardData: {
-      query: gql`query getDashboardData($date: String!, $unit: String!, $start: String!, $end: String!) {
-        metrics:getMetrics(date:$date, unit:$unit) {
+      query: gql`query getDashboardData($start: String!, $end: String!) {
+        metrics:getMetrics(start:$start, end:$end) {
           metric
           id
         },
         ivao_vids: getIvaoVIds{
           vid
         }
-        by_pilot: monthlyFlightsByPilot(date:$date, unit:$unit) {
+        by_pilot: monthlyFlightsByPilot(start:$start, end:$end) {
           x
           y
         },
-        by_day: monthlyFlightsByDay(date:$date, unit:$unit) {
+        by_day: monthlyFlightsByDay(start:$start, end:$end) {
           x
           y
         }
