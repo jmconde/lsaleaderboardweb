@@ -160,7 +160,7 @@ export default{
   methods: {
     async doQuery() {
       this.loading = true;
-      const result = await request('http://localhost:3100/graphql',  GraphQLQueries.GQL_ALL_METRICS, this.range);
+      const result = await request(process.env.ROOT_GRAPHQL,  GraphQLQueries.GQL_ALL_METRICS, this.range);
       this.result = result;
       this.flightsByDay = result.flightsByDay;
       this.flightsByPilot = result.flightsByPilot;
