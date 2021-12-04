@@ -10,26 +10,17 @@
        />
   
     <div id="dashboard" class="container">
-      <section class="section">
+      <section class="pt-2 section">
+        <div class="mb-4 has-text-right">{{this.startDate}} <span class="has-text-weight-bold">to</span> {{this.endDate}}</div>
         <div class="columns">
           <div class="column">
             <Widget>
-              <Metric :value="getMetric('total_flights')" :name="'Total flights'"></Metric>
+              <Metric title="Totals" :data="allMetricsData" ></Metric>
             </Widget>
           </div>
           <div class="column">
             <Widget>
-              <Metric :value="formatTime(getMetric('total_time'))" :name="'Total Flight Hours'"></Metric>
-            </Widget>
-          </div>
-          <div class="column">
-            <Widget>
-              <Metric :value="formatDistance(getMetric('total_distance'))" :name="'Total Distance'"></Metric>
-            </Widget>
-          </div>
-          <div class="column">
-            <Widget>
-              <Metric :value="formatTime(getIvaoMetric('total_time'))" :name="'Total IVAO Time'"></Metric>
+              <Metric title="IVAO Totals" :data="ivaoMetricsData" ></Metric>
             </Widget>
           </div>
         </div>
@@ -98,84 +89,13 @@ import LineChart from '../components/LineChart/LineChart.vue';
 import BarChart from '../components/BarChart/BarChart.vue';
 import Metric from '../components/Metric.vue';
 
-import gql from 'graphql-tag';
+import { GraphQLQueries } from '../data/graphql/queries';
+import { request } from 'graphql-request'
 
 export default{
-  apollo: {
-    allMetrics: {
-      query: gql`query getAllMetrics($start: String!, $end: String!) {
-        allMetrics:getMetrics(start:$start, end:$end) {
-          metric
-          id
-        }
-      }`,
-      variables() {
-        return {
-          start: this.start,
-          end: this.end,
-        }
-      },
-      fetchPolicy: 'no-cache',
-    },
-    ivaoMetrics: {
-      query: gql`query getIvaoMetrics($start: String!, $end: String!) {
-        ivaoMetrics:getIvaoMetrics(start:$start, end:$end) {
-          all {
-            metric
-            id
-          }
-          byPilot {
-            id
-            name
-            metrics {
-              id
-              metric
-            }
-          }
-        }
-      }`,
-      variables() {
-        return {
-          start: this.start,
-          end: this.end,
-        }
-      },
-      fetchPolicy: 'no-cache',
-    },
-    flightsByPilot: {
-      query: gql`query getFlightsByPilot ($start: String!, $end: String!) {
-        flightsByPilot: monthlyFlightsByPilot(start:$start, end:$end) {
-          x
-          y
-        }
-      },`,
-      variables() {
-        return {
-          start: this.start,
-          end: this.end,
-        }
-      },
-      fetchPolicy: 'no-cache',
-    },
-    flightsByDay: {
-      query: gql`query getFlightsByDay ($start: String!, $end: String!) {
-        flightsByDay: monthlyFlightsByDay(start:$start, end:$end) {
-          x
-          y
-        }
-      },`,
-      variables() {
-        return {
-          start: this.start,
-          end: this.end,
-        }
-      },
-      fetchPolicy: 'no-cache',
-    },
-  },
   data() {
     return {
-      allMetrics: [],
+      result: {},
       ivaoMetrics: [],
       flightsByPilot: [],
       flightsByDay: [],
@@ -186,7 +106,10 @@ export default{
       showMap: false,
       markers: [],
       polylines: [],
-      version: window.__GLOBALS.version
+      version: window.__GLOBALS.version,
+      startDate: '2021-12-01',
+      endDate: '2021-12-31',
+      loading: true,
     }
   },
   components: {
@@ -199,27 +122,60 @@ export default{
     BarChart,
     Metric,
   },
+  mounted() {
+    this.doQuery();
+  },
   computed:{
+     //:metrics-id="['total_time', 'total_time', 'total_time']" :name="['Total flights', 'Total flights', 'Total flights']"
+    allMetricsData() {
+      const { allMetrics } =  this.result;
+      if (!allMetrics) {
+         return;
+      }
+      return this.getMetricData(allMetrics)
+    },
+    ivaoMetricsData() {
+      const { ivaoMetrics } =  this.result;
+      if (!ivaoMetrics || !ivaoMetrics.all) {
+         return;
+      }
+      return this.getMetricData(ivaoMetrics.all)
+    },
+    range() {
+      return {
+        start: this.start,
+        end: this.end,
+      }
+    },
     start() {
-       return Vue.moment().startOf('month').format();
+       return Vue.moment(this.startDate).startOf('day').format('YYYY-MM-DD HH:mm:ss');
     },
     end() {
-       return Vue.moment().endOf('month').format();
+       return Vue.moment(this.endDate, 'YYYY-MM-DD').endOf('day').format('YYYY-MM-DD HH:mm:ss');
     },
     staticsHost() {
       return process.env.STATICS_HOST || '';
     },
   },
   methods: {
-    getMetric(id) {
-      if (!this.allMetrics) return 0;
-      const obj = this.allMetrics.find(d => d.id === id);
+    async doQuery() {
+      this.loading = true;
+      const result = await request('http://localhost:3100/graphql',  GraphQLQueries.GQL_ALL_METRICS, this.range);
+      this.result = result;
+      this.flightsByDay = result.flightsByDay;
+      this.flightsByPilot = result.flightsByPilot;
+    },
+    getMetric(id, arrMetrics) {
+      const obj = arrMetrics.find(d => d.id === id);
       return obj ? obj.metric : NaN;
     },
-    getIvaoMetric(id) {
-      if (!this._.has(this.ivaoMetrics, 'all') ) return 0;
-      const obj = this.ivaoMetrics.all.find(d => d.id === id);
-      return obj ? obj.metric : NaN;
+    formatTime(value) {
+      const hours = Math.floor(value / 60);
+      const minutes = value % 60;
+      return `${hours}h ${minutes}m`;
+    },
+    formatDistance(value) {
+      return `${Math.round(value)} nm`
     },
     modalClosed() {
       this.markers = [];
@@ -233,13 +189,30 @@ export default{
       this.showMap = true;
       this.mapType = type;
     },
-    formatTime(value) {
-      const hours = Math.floor(value / 60);
-      const minutes = value % 60;
-      return `${hours}h ${minutes}m`;
-    },
-    formatDistance(value) {
-      return `${Math.round(value)} nm`
+    getMetricData(data) {
+      return {
+        main: [{
+          label: 'Flight Hours',
+          value: this.getMetric('total_time', data),
+          format: 'time',
+        }, {
+          label: 'Distance',
+          value: this.getMetric('total_distance', data),
+          format: 'distance',
+        }],
+        secondary: [{
+          label: 'Flights',
+          value: this.getMetric('total_flights', data)
+        }, {
+          label: 'hours/flights',
+          value: this.getMetric('avg_time', data),
+          format: 'time',
+        }, {
+          label: 'distance/flights',
+          value: this.getMetric('avg_distance', data),
+          format: 'distance',
+        }]
+      }
     }
   }
 }

@@ -1,54 +1,60 @@
 <template>
   <div class="notification is-info is-light">
-    <div class="has-text-weight-medium is-size-6">
-      {{name}}
+    <h1 class="title is-size-6">{{title}}</h1>
+    <div class="level">
+      <div v-for="(metric, index) in data.main" :key="index" class="level-item has-text-centered">
+        <div>
+          <div class="heading">
+            {{metric.label}}
+          </div>
+          <div class="title">
+            <FormatTime v-if="metric.format === 'time'" :value="metric.value" />
+            <FormatDistance v-else-if="metric.format === 'distance'" :value="metric.value" />
+            <span v-else>{{metric.value}}</span>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="is-size-1 is-size-2-tablet is-size-3-mobile has-text-weight-bold">{{value}} <span v-if="unit">{{unit}}</span></div>
-    <small></small>
+
+    <div class="level">
+      <div v-for="(metric, index) in data.secondary" :key="index"  class="level-item has-text-centered">
+        <small>
+          <div class="heading">
+            {{metric.label}}
+          </div>
+          <div class="is-size-5 has-text-weight-bold">
+            <FormatTime v-if="metric.format === 'time'" :value="metric.value" />
+            <FormatDistance v-else-if="metric.format === 'distance'" :value="metric.value" />
+            <span v-else>{{metric.value}}</span>
+          </div>
+        </small>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import WidgetContentMixin from "../mixins/WidgetContentMixin";
-import gql from 'graphql-tag';
-
+import FormatTime from  './FormatTime.vue';
+import FormatDistance from  './FormatDistance.vue';
 export default {
-  props: [ 'value', 'name', 'unit' ],
-  // apollo: {
-  //   $loadingKey: 'loading',
-  //   data: {
-  //     loading: 0,
-  //     query: gql`query TotalFilghts($month: Int!, $prevMonth: Int!) {
-  //       current: monthlyTotalFlights(month: $month) {
-  //         metric
-  //       }
-  //       previous: monthlyTotalFlights(month: $prevMonth) {
-  //         metric
-  //       }
-  //     }`,
-  //     result(a) {
-  //       console.log('result', a);
-  //       this.widgetInitialized();
-  //     },
-  //     variables() {
-  //       return  {
-  //         month: this.month,
-  //         prevMonth: this.month - 1
-  //       };
-  //     },
-  //     update: data => ({
-  //       current: data.current,
-  //       previous: data.previous
-  //     }),
-  //     pollInterval: 15000
-  //   }
-  // },
-  mixins: [WidgetContentMixin],
-  data() {
-    return {
-      month: new Date().getMonth(),
-      // data: {},
+  props: {
+    title: String,
+    data: {
+      type: Object,
+      default() {
+        return {
+          main: [],
+          secondary: [],
+        }
+      }
     }
+  },
+  data() {
+    return {}
+  },
+  components: {
+    FormatTime,
+    FormatDistance
   }
 }
 </script>

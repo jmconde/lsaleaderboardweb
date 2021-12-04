@@ -1,5 +1,5 @@
 <template>
-  <div class="widget" :id="id" @loading="handleLoading">
+  <div class="widget" :id="id">
     <LottieAnimation :hidden="initialized" :width="200" :height="200" :path="animationPath"></LottieAnimation>
     <div :hidden="!initialized || error">
       <slot></slot>
@@ -12,9 +12,11 @@
 
 <script>
 import LottieAnimation from '../components/LottieAnimation.vue';
+
 export default {
   props: {
     height: Number,
+    metricId: String,
     animationPath: {
       type: String,
       default() {
@@ -27,13 +29,16 @@ export default {
       id: this.uuid(),
       loading: true,
       error: false,
-      initialized: true
-    }
+      initialized: true,
+      data: null,
+      result: null,
+    };
   },
   mounted() {
-    this.$on('loading', this.handleLoading);
+    // this.$on('loading', this.handleLoading);
     // this.$on('widget-loaded', () => console.log('loaded'));
     // this.$on('widget-error', () => console.log('error'));
+    // this.doQuery();
   },
   methods: {
     handleLoading() {
@@ -41,6 +46,7 @@ export default {
       this.error = false;
     },
     handleInitialized() {
+      console.log('----');
       this.initialized = true;
     },
     handleLoaded() {
@@ -48,6 +54,16 @@ export default {
     },
     handleFailed() {
       this.error = true;
+    },
+    getMetric(id) {
+      if (!this.allMetrics) return 0;
+      const obj = this.result.find(d => d.id === id);
+      return obj ? obj.metric : NaN;
+    },
+    getIvaoMetric(id) {
+      if (!this._.has(this.ivaoMetrics, 'all') ) return 0;
+      const obj = this.ivaoMetrics.all.find(d => d.id === id);
+      return obj ? obj.metric : NaN;
     },
     uuid() {
       return 'xxxx-xxxx-xxx-xxxx'.replace(/[x]/g, (c) => {  
