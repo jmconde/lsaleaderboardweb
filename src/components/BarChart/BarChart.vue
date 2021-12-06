@@ -2,7 +2,7 @@
   <div>
     <apexchart
       type="bar"
-      height="250"
+      :height="this.height"
       :options="chartOptions"
       :series="series"
     ></apexchart>
@@ -36,6 +36,7 @@ export default {
   //   }
   // },
   props: {
+    title: String,
     data: {
       type: Array,
       default: () => [],
@@ -56,17 +57,22 @@ export default {
       // }],
       month: new Date().getMonth(),
       // data: [],
-      baseChartOptions: {
+    };
+  },
+  computed: {
+    baseChartOptions() {
+      return {
+        colors: ['#967756', '#F3AD41'],
         chart: {
           type: 'bar',
           fontFamily: 'Open Sans, sans-serif',
           toolbar: {
             show: false,
           },
-          height: 200,
+          height: this.height,
         },
         title: {
-          text: 'This month flights by Pilot',
+          text: this.title,
           align: 'center',
           margin: 0,
           style: {
@@ -75,46 +81,38 @@ export default {
         },
         plotOptions: {
           bar: {
-            borderRadius: 4,
             horizontal: true,
+            borderRadius: 8,
+            columnWidth: '50%',
+            endingShape: 'rounded'
           }
         },
-        // xaxis: {
-        //   categories: ['South Korea', 'Canada', 'United Kingdom', 'Netherlands', 'Italy', 'France', 'Japan',
-        //     'United States', 'China', 'Germany'
-        //   ],
-        // },
-        // title: {
-        //   text: 'This month flights by pilot',
-        //   align: 'center',
-        //   margin: 0,
-        //   style: {
-        //     fontSize: '16px'
-        //   },
-        // },
         dataLabels: {
           enabled: false
         },
-      },
-    };
-  },
-  computed: {
+      }
+    },
     series() {
       const series = [
         {
+          name: 'Vuelos',
           data: this.data.map((d) => d.y),
         },
+        // {
+        //   name: 'Vuelos en IVAO',
+        //   data: this.data.map((d) => d.y),
+        // },
       ];
       return series;
     },
     chartOptions() {
       const xaxis = {
         categories: this.data.map((d) => d.x),
-        labels: {
-          formatter: function(val) {
-            return val.toFixed(0);
-          }
-        }
+        // labels: {
+        //   formatter: function(val) {
+        //     return val.toFixed(0);
+        //   }
+        // }
       };
       return { ...this.baseChartOptions, ...{ xaxis } };
     },

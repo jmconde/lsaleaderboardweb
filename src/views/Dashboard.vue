@@ -1,51 +1,33 @@
 <template>
-  <div class="container is-fluid">
-    <LeafletMap :show="showMap" 
-      tiles-url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" 
-      attribution="&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors"
-      :type="mapType"
-      :markers="markers"
-      :polylines="polylines"
-      @modal-closed="modalClosed"
-       />
-  
-    <div id="dashboard" class="container">
-      <section class="pt-2 section">
-        <div class="mb-4 has-text-right">{{this.startDate}} <span class="has-text-weight-bold">to</span> {{this.endDate}}</div>
+  <div>
+    <div id="dashboard">
+      <section class="pt-2">
+        <div class="mb-4 has-text-right" v-html="$t('labels.dateRange',  {start: this.startDate, end: this.endDate})"></div>
         <div class="columns">
           <div class="column">
             <Widget>
-              <Metric title="Totals" :data="allMetricsData" ></Metric>
+              <Metric :title="$t('titles.totals')" :data="allMetricsData" ></Metric>
             </Widget>
           </div>
           <div class="column">
             <Widget>
-              <Metric title="IVAO Totals" :data="ivaoMetricsData" ></Metric>
+              <Metric :title="$t('titles.ivaoTotals')" :data="ivaoMetricsData" ></Metric>
             </Widget>
           </div>
         </div>
         <div class="tile is-ancestor">
-          <div class="tile is-parent">
+          <div class="tile is-parent ">
             <div class="tile is-child">
-              <Widget>
-                <LineChart :data="flightsByDay" :height="250"></LineChart>
-              </Widget>
-            </div>
-          </div>
-          <div class="tile is-parent">
-            <div class="tile is-child">
-              <Widget>
-                <BarChart :data="flightsByPilot" :height="250"></BarChart>
-              </Widget>
-            </div>
-          </div>
-        </div>
-        <div class="tile is-ancestor">
-          <div class="tile is-parent">
-            <div class="tile is-child">
-              <Widget :height="500">
-                <PilotsList @show-map="mapData"/>
-              </Widget>
+              <div class="notification is-light">
+                <Widget>
+                  <LineChart :title="$t('titles.flightsByDay')" :data="flightsByDay" :height="250"></LineChart>
+                </Widget>
+              </div>
+              <div class="notification is-light">
+                <Widget>
+                  <BarChart :title="$t('titles.flightsByPilot')" :data="flightsByPilot" :height="350"></BarChart>
+                </Widget>
+              </div>
             </div>
           </div>
           <div class="tile is-parent is-4">
@@ -96,20 +78,14 @@ export default{
   data() {
     return {
       result: {},
-      ivaoMetrics: [],
-      flightsByPilot: [],
-      flightsByDay: [],
-      dashboardData: {},
       period: 'month',
       date: new Date(),
-      mapType: 'location',
-      showMap: false,
-      markers: [],
-      polylines: [],
       version: window.__GLOBALS.version,
       startDate: '2021-12-01',
       endDate: '2021-12-31',
       loading: true,
+      flightsByPilot: [],
+      flightsByDay: [],
     }
   },
   components: {
@@ -169,46 +145,26 @@ export default{
       const obj = arrMetrics.find(d => d.id === id);
       return obj ? obj.metric : NaN;
     },
-    formatTime(value) {
-      const hours = Math.floor(value / 60);
-      const minutes = value % 60;
-      return `${hours}h ${minutes}m`;
-    },
-    formatDistance(value) {
-      return `${Math.round(value)} nm`
-    },
-    modalClosed() {
-      this.markers = [];
-      this.polylines = [];
-      this.showMap = false;
-    },
-    mapData(data) {
-      const { markers, polylines, type } = data;
-      this.markers = markers;
-      this.polylines = polylines;
-      this.showMap = true;
-      this.mapType = type;
-    },
     getMetricData(data) {
       return {
         main: [{
-          label: 'Flight Hours',
+          label: this.$t('metrics.flightHours'),
           value: this.getMetric('total_time', data),
           format: 'time',
         }, {
-          label: 'Distance',
+          label: this.$t('metrics.distance'),
           value: this.getMetric('total_distance', data),
           format: 'distance',
         }],
         secondary: [{
-          label: 'Flights',
+          label: this.$t('metrics.flights'),
           value: this.getMetric('total_flights', data)
         }, {
-          label: 'hours/flights',
+          label: this.$t('metrics.hoursAvg'),
           value: this.getMetric('avg_time', data),
           format: 'time',
         }, {
-          label: 'distance/flights',
+          label: this.$t('metrics.distanceAvg'),
           value: this.getMetric('avg_distance', data),
           format: 'distance',
         }]

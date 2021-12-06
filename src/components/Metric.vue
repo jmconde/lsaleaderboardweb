@@ -1,5 +1,5 @@
 <template>
-  <div class="notification is-info is-light">
+  <div class="notification is-primary is-light">
     <h1 class="title is-size-6">{{title}}</h1>
     <div class="level">
       <div v-for="(metric, index) in data.main" :key="index" class="level-item has-text-centered">

@@ -1,6 +1,6 @@
 <template>
   <div class="notification">
-    <h6 class="title is-6">Online Pilots</h6>
+    <h6 class="title is-6">{{$t('titles.onlineActivity')}}</h6>
     <div class="media" v-for="d in data" :key="d.user_id">
       <figure class="media-left">
         <p class="image is-32x32">
@@ -77,7 +77,9 @@ export default {
       try {
         const { data } = await axios.get(`${process.env.ROOT_API}/acars`);
         this.widgetLoaded();
-        this.data = data.data;
+        this.data = data.data.sort((a,b) => {
+          return (new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
+        });
         this.loop();
       } catch(err) {
         this.widgetFailed();

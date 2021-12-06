@@ -6,7 +6,6 @@
 import axios from 'axios';
 import { latLng } from 'leaflet';
 import { customIcons } from '../../data/MapHelper';
-import WidgetContentMixin from '../../mixins/WidgetContentMixin';
 
 export default {
   props:{
@@ -19,22 +18,21 @@ export default {
   },
   async mounted() {
     await this.loadData();
-    this.widgetInitialized();
+    // this.widgetInitialized();
   },
-  mixins: [ WidgetContentMixin ],
   methods: {
     async loadData() {
       console.log('this.$parent :>> ', this.$parent);
-      this.widgetLoading();
+      // this.widgetLoading();
       this.$emit('loading', { id: this.id });
       try {
         const { data } = await axios.get(`${process.env.ROOT_API}/pilots`);
         const { pilots, lastUpdated, version } = data;
         this.pilots = pilots;
-        this.widgetLoaded();
+        // this.widgetLoaded();
         console.log('this.pilots :>> ', this.pilots);
       } catch(err){
-        this.widgetFailed();
+        // this.widgetFailed();
       }
       
     },

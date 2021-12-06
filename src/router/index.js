@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Dashboard from '../views/Dashboard.vue';
+import Leaderboard from '../views/Leaderboard.vue';
 
 Vue.use(VueRouter);
 
@@ -11,9 +12,10 @@ const routes = [
     component: Dashboard,
   },
   {
-    path: "/leaderboard",
+    path: "/all-time",
     name: "All Time",
-    component: () => import(/* webpackChunkName: "about" */ "../views/Leaderboard.vue"),
+    component: Leaderboard,
+    // component: () => import(/* webpackChunkName: "about" */ "../views/Leaderboard.vue"),
   }
 ];
 

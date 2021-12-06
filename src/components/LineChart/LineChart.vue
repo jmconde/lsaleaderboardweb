@@ -5,7 +5,7 @@
     </div> -->
     <apexchart
       type="line"
-      height="250"
+      :height="this.height"
       :options="chartOptions"
       :series="series"
     ></apexchart>
@@ -41,6 +41,7 @@ export default {
   //   }
   // },
   props: {
+    title: String,
     data: {
       type: Array,
       default: () => [],
@@ -64,72 +65,85 @@ export default {
     return {
       loading: 0,
       month: new Date().getMonth(),
-      baseChartOptions: {
-        chart: {
-          fontFamily: 'Open Sans, sans-serif',
-          toolbar: {
-            show: false,
-          },
-          height: this.height,
-          type: "line",
-          zoom: {
-            enabled: false,
-          },
-        },
-        title: {
-          text: 'This month flights by Day',
-          align: 'center',
-          margin: 0,
-          style: {
-            fontSize: '16px'
-          },
-        },
-        dataLabels: {
-          enabled: false,
-        },
-        stroke: {
-          // curve: "smooth",
-          // dashArray: '20 5 10 5',
-          width: 3,
-        },
-        markers: {
-          size: 0,
-        },
-        fill: {
-          type: "gradient",
-        },
-        grid: {
-          row: {
-            colors: ["#f3f3f3", "transparent"], // takes an array which will be repeated on columns
-            opacity: 0.5,
-          },
-        },
-        yaxis: {
-          show: true,
-          axisBorder: {
-            show: false
-          },
-          labels: {
-            style: {
-              fontFamily: 'Open Sans, sans-serif'
-            }
-          }
-        },
-        xaxis: {
-          categories: []
-        },
-      },
     };
   },
   computed: {
+    baseChartOptions() {
+      return {
+        colors: ['#967756', '#F3AD41'],
+        chart: {
+        fontFamily: 'Open Sans, sans-serif',
+        toolbar: {
+          show: false,
+        },
+        height: this.height,
+        type: "line",
+        zoom: {
+          enabled: false,
+        },
+      },
+      title: {
+        text: this.title,
+        align: 'center',
+        margin: 0,
+        style: {
+          fontSize: '16px'
+        },
+      },
+      dataLabels: {
+        enabled: false,
+      },
+      stroke: {
+        curve: "smooth",
+        // dashArray: '20 5 10 5',
+        width: 3,
+      },
+      markers: {
+        size: 0,
+      },
+      fill: {
+        type: "gradient",
+      },
+      grid: {
+        row: {
+          colors: ["#f3f3f3", "transparent"], // takes an array which will be repeated on columns
+          opacity: 0.5,
+        },
+      },
+      yaxis: {
+        show: true,
+        axisBorder: {
+          show: false
+        },
+        labels: {
+          style: {
+            fontFamily: 'Open Sans, sans-serif'
+          }
+        } 
+      },
+      xaxis: {
+        categories: []
+      },
+      }
+    },
+    titleTranslated() {
+      console.log(this.title);
+      return  this.$t(this.title);
+    },
     series() {
-      const data = this.data.map((d) => d.y)
+      const data = this.data.map((d) => d.y);
+      const data2 = this.data.map((d) => d.y - 1);
       data.unshift(0);
+      data2.unshift(0);
       const series = [
         {
           name: "Flights",
           data,
         },
+        // {
+        //   name: "Flights IVAO",
+        //   data: data2,
+        // },
       ];
       return series;
     },
@@ -145,10 +159,6 @@ export default {
         floating: false
       };
       return { ...this.baseChartOptions, ...{ xaxis } };
-    },
-    isLoading() {
-      if (!this.$apollo.queries.data) return this.$apollo.loading;
-      return this.$apollo.queries.data.loading;
     }
   },
   
