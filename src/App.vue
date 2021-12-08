@@ -49,7 +49,7 @@ export default {
   @import "../node_modules/bulma/sass/components/media.sass";
   @import "../node_modules/bulma/sass/components/modal.sass";
   @import "../node_modules/bulma/sass/elements/progress.sass";
-  // @import "../node_modules/bulma/sass/elements/box.sass";
+  @import "../node_modules/bulma/sass/elements/button.sass";
   @import "../node_modules/bulma/sass/elements/image.sass";
   @import "../node_modules/bulma/sass/elements/container.sass";
   @import "../node_modules/bulma/sass/elements/notification.sass";
@@ -57,6 +57,8 @@ export default {
   @import "../node_modules/bulma/sass/elements/tag.sass";
   @import "../node_modules/bulma/sass/elements/title.sass";
   @import "../node_modules/bulma/sass/layout/section.sass";
+  @import "../node_modules/bulma/sass/form/shared.sass";
+  @import "../node_modules/bulma/sass/form/select.sass";
   // @import "../node_modules/bulma/sass/layout/footer.sass";
   // @import '../'
   // // dashbboard

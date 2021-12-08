@@ -2,7 +2,7 @@
   <div>
     <div id="dashboard">
       <section class="pt-2">
-        <div class="mb-4 has-text-right" v-html="$t('labels.dateRange',  {start: this.startDate, end: this.endDate})"></div>
+        <RangeSelector @range-change="rangeChanged" />
         <div class="columns">
           <div class="column">
             <Widget>
@@ -70,6 +70,7 @@ import Widget from '../components/Widget.vue';
 import LineChart from '../components/LineChart/LineChart.vue';
 import BarChart from '../components/BarChart/BarChart.vue';
 import Metric from '../components/Metric.vue';
+import RangeSelector from '../components/RangeSelector.vue';
 
 import { GraphQLQueries } from '../data/graphql/queries';
 import { request } from 'graphql-request'
@@ -97,6 +98,7 @@ export default{
     LineChart,
     BarChart,
     Metric,
+    RangeSelector,
   },
   mounted() {
     this.doQuery();
@@ -144,6 +146,13 @@ export default{
     getMetric(id, arrMetrics) {
       const obj = arrMetrics.find(d => d.id === id);
       return obj ? obj.metric : NaN;
+    },
+    
+    rangeChanged(range) {
+      console.log('rangeChanged', range);
+      this.startDate = range[0];
+      this.endDate = range[1];
+      this.doQuery();
     },
     getMetricData(data) {
       return {

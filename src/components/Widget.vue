@@ -46,7 +46,6 @@ export default {
       this.error = false;
     },
     handleInitialized() {
-      console.log('----');
       this.initialized = true;
     },
     handleLoaded() {

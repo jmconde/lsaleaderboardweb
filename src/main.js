@@ -12,6 +12,8 @@ import VueMoment from 'vue-moment'
 import { faCaretUp } from '@fortawesome/free-solid-svg-icons';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 import { faCaretRight } from '@fortawesome/free-solid-svg-icons';
+import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import { faAngleLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 // import { ApolloClient } from 'apollo-client';
 // import { createHttpLink } from 'apollo-link-http';
@@ -39,11 +41,19 @@ const i18n = new VueI18n({
 library.add(faCaretUp);
 library.add(faCaretDown);
 library.add(faCaretRight);
+library.add(faAngleRight);
+library.add(faAngleLeft);
 
 import 'leaflet/dist/leaflet.css';
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 // Vue.use(vueCompositionApi);
 Vue.use(VueMoment);
+console.log(Vue.moment().locale());
+Vue.moment.updateLocale("en", { week: {
+  dow: 1, // First day of week is Monday
+  doy: 4  // First week of year must contain 4 January (7 + 1 - 4)
+}});
+
 // Vue.use(VueApollo);
 Vue.use(VueLodash, { lodash });
 // const apolloProvider = new VueApollo({

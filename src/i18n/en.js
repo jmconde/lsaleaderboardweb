@@ -20,4 +20,8 @@ export const en = {
   labels: {
     dateRange: '<small><b>From</b></small> {start} <small><b>to</b></small> {end}'
   },
+  range: {
+    monthly: 'Monthly',
+    weekly: 'Weekly'
+  },
 }

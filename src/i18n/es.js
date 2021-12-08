@@ -20,4 +20,8 @@ export const es = {
   labels: {
     dateRange: '<small><b>Desde</b></small> {start} <small><b>hasta</b></small> {end}'
   },
+  range: {
+    monthly: 'Mensual',
+    weekly: 'Semanal'
+  },
 }

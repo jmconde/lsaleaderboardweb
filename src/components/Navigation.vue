@@ -60,13 +60,14 @@
 </template>
 
 <script>
+import Vue from 'vue';
 const LANGS =  [{
   locale: 'en',
   image: 'https://cdn0.iconfinder.com/data/icons/all-national-flags-of-the-world-very-high-quality-/283/usa-512.png',
   name: 'English',
 }, {
   locale: 'es',
-  image: 'https://cdn0.iconfinder.com/data/icons/all-national-flags-of-the-world-very-high-quality-/283/spain-512.png',
+  image: 'https://cdn0.iconfinder.com/data/icons/all-national-flags-of-the-world-very-high-quality-/283/colombia-512.png',
   name: 'Español',
 }];
 export default {
@@ -78,7 +79,8 @@ export default {
   },
   methods: {
     changeLocale(lang) {
-      console.log(lang);
+      console.log('locale cahnged to', lang.locale);
+      Vue.moment.locale(lang.locale);
       this.lang = lang;
       this.$root.$i18n.locale = lang.locale
     }

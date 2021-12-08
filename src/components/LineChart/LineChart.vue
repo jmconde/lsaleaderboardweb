@@ -57,7 +57,6 @@ export default {
   mixins: [WidgetContentMixin],
   updated: function () {
     if(this.data.length > 0) {
-      console.log('xccasdasd');
       this.widgetInitialized();
     }
   },
