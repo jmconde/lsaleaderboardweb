@@ -57,6 +57,7 @@ export default {
   @import "../node_modules/bulma/sass/elements/tag.sass";
   @import "../node_modules/bulma/sass/elements/title.sass";
   @import "../node_modules/bulma/sass/layout/section.sass";
+  @import "../node_modules/bulma/sass/layout/footer.sass";
   @import "../node_modules/bulma/sass/form/shared.sass";
   @import "../node_modules/bulma/sass/form/select.sass";
   

@@ -1,7 +1,7 @@
 <template>
   <section class="section">
     <h1 class="title is-5">{{$t('titles.aircraftList')}}</h1>
-    <table class="table is-striped is-hoverable"><!--  is-striped is-hoverable is-narrow is-fullwidth -->
+    <table class="table is-striped is-hoverable is-fullwidth"><!--  is-striped is-hoverable is-narrow  -->
       <thead>
         <tr>
           <th class="has-text-centered">{{$t('labels.registration')}}</th>
