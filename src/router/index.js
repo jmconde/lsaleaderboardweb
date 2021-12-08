@@ -1,7 +1,8 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Dashboard from '../views/Dashboard.vue';
-import Leaderboard from '../views/Leaderboard.vue';
+import Aircrafts from '../views/Aircrafts.vue';
+import PilotsList from '../views/PilotsList.vue';
 
 Vue.use(VueRouter);
 
@@ -12,11 +13,16 @@ const routes = [
     component: Dashboard,
   },
   {
-    path: "/all-time",
+    path: "/alltime",
     name: "All Time",
-    component: Leaderboard,
+    component: PilotsList,
     // component: () => import(/* webpackChunkName: "about" */ "../views/Leaderboard.vue"),
-  }
+  },
+  {
+    path: "/aircrafts",
+    name: "Aircrafts",
+    component: Aircrafts,
+  },
 ];
 
 const router = new VueRouter({

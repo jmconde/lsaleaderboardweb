@@ -15,8 +15,9 @@
     <div id="navbarBasicExample" class="navbar-menu">
       <div class="navbar-start">
         <router-link class="navbar-item" to="/">{{$t('menu.home')}}</router-link>
-
-        <router-link class="navbar-item" to="/all-time">{{$t('menu.alltime')}}</router-link>
+        <router-link class="navbar-item" to="/alltime">{{$t('menu.alltime')}}</router-link>
+        <router-link class="navbar-item" to="/aircrafts">{{$t('menu.aircrafts')}}</router-link>
+        <router-link class="navbar-item" to="/test">Test</router-link>
 
         <!-- <div class="navbar-item has-dropdown is-hoverable">
           <a class="navbar-link">

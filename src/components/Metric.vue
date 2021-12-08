@@ -10,7 +10,7 @@
           <div class="title">
             <FormatTime v-if="metric.format === 'time'" :value="metric.value" />
             <FormatDistance v-else-if="metric.format === 'distance'" :value="metric.value" />
-            <span v-else>{{metric.value}}</span>
+            <span v-else>{{metric.value || 0}}</span>
           </div>
         </div>
       </div>
@@ -25,7 +25,7 @@
           <div class="is-size-5 has-text-weight-bold">
             <FormatTime v-if="metric.format === 'time'" :value="metric.value" />
             <FormatDistance v-else-if="metric.format === 'distance'" :value="metric.value" />
-            <span v-else>{{metric.value}}</span>
+            <span v-else>{{metric.value || 0}}</span>
           </div>
         </small>
       </div>

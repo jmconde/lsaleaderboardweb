@@ -8,10 +8,15 @@
         </p>
       </figure>
       <div class="media-content">
-        <div class="level mb-1">
-            <div class="is-size-6 has-text-left has-text-weight-semibold">{{d.user.name}} </div>
-          <div class="is-size-7">{{d.airline.icao}}{{d.flight_number}} </div>
-        </div>
+        <div class="is-size-6 has-text-left has-text-weight-semibold">{{d.user.name}} </div>
+          <div class="level mb-1">
+            <p class="is-size-7 has-text-left has-text-weight-light" ><small>
+              {{d.airline.icao}}{{d.flight_number}}
+            </small></p>
+            <p class="is-size-7 has-text-left has-text-weight-light" ><small>
+              {{d.aircraft.icao}} {{d.aircraft.registration}}
+            </small></p>
+          </div>
          <div class="level mb-0">
             <div class="is-size-4 has-text-weight-light">{{d.dpt_airport_id}}</div>
             <progress class="progress is-small mb-0 mt-0 ml-1 mr-1" :value="percentageCompleted(d.planned_distance.nmi, d.distance.nmi)" max="100">{{round(d.distance.nmi)}} - {{round(d.planned_distance.nmi)}}</progress>
@@ -21,7 +26,7 @@
         <div class="level mb-0">
           <span class="is-size-7 is-italic">{{d.status_text}}</span>
           <div class="is-size-7 has-text-weight-semibold"><small>{{round(d.distance.nmi)}}nm / {{round(d.planned_distance.nmi)}}nm</small></div>
-          <span class="is-size-7 is-italic"></span>
+          <span class="is-size-7 is-italic"><small>Fuel: {{d.aircraft.fuel_onboard}}</small></span>
         </div>
         <p class="is-size-7 has-text-weight-light"><small>{{d.route}}</small></p>
 

@@ -1,7 +1,7 @@
 <template>
   <div class="level">
-    <div class="level-left">{{period}}-{{range}}-{{date}}
-      <div class="level-item select is-primary is-light is-rounded is-small">
+    <div class="level-left">
+      <div class="level-item select is-primary is-light isx-rounded is-small">
         <select v-model="period">
           <option v-for="option in periods" :value="option.value" :key="option.value">
             {{$t(option.name)}}

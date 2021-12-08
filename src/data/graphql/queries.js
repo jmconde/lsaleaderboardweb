@@ -60,4 +60,45 @@ export const GraphQLQueries = {
       y
     }
   }`,
+
+  GQL_LIST_AIRCRAFTS: gql`query getAircrafts {
+    aircrafts:getAircraftList {
+      id
+      type
+      name
+      registration
+      state
+      status
+      location
+      fleet
+      hub
+      flightTime
+      fuelOnboard
+    }
+  }`,
+
+  GQL_LIST_PILOTS: gql`query getActivePilotList {
+    pilots:getActivePilotList {
+      id
+      pilotId
+      name
+      rankId
+      rankName
+      location
+      flights
+      flightTime
+      country
+      lastFlight{
+        pilotId
+        departure
+        arrival
+        time
+        distance
+        date
+        landingRate
+        state
+        status
+      }
+    }
+  }`,
 };
