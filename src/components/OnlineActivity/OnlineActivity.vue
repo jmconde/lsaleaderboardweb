@@ -8,15 +8,18 @@
         </p>
       </figure>
       <div class="media-content">
-        <div class="is-size-6 has-text-left has-text-weight-semibold">{{d.user.name}} </div>
-          <div class="level mb-1">
-            <p class="is-size-7 has-text-left has-text-weight-light" ><small>
-              {{d.airline.icao}}{{d.flight_number}}
-            </small></p>
-            <p class="is-size-7 has-text-left has-text-weight-light" ><small>
-              {{d.aircraft.icao}} {{d.aircraft.registration}}
-            </small></p>
-          </div>
+        <div class="level mb-1">
+          <div class="is-size-6 has-text-left has-text-weight-semibold">{{d.user.name}}</div>
+          <img v-if="d.isInIvao" :src="require(`../../assets/img/icao_logo_white.svg`)">
+        </div>
+        <div class="level mb-1">
+          <p class="is-size-7 has-text-left has-text-weight-light" ><small>
+            {{d.airline.icao}}{{d.flight_number}}
+          </small></p>
+          <p class="is-size-7 has-text-left has-text-weight-light" ><small>
+            {{d.aircraft.icao}} {{d.aircraft.registration}}
+          </small></p>
+        </div>
          <div class="level mb-0">
             <div class="is-size-4 has-text-weight-light">{{d.dpt_airport_id}}</div>
             <progress class="progress is-small mb-0 mt-0 ml-1 mr-1" :value="percentageCompleted(d.planned_distance.nmi, d.distance.nmi)" max="100">{{round(d.distance.nmi)}} - {{round(d.planned_distance.nmi)}}</progress>
