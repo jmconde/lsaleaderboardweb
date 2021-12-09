@@ -8,16 +8,25 @@
           </option>
         </select>
       </div>
+      <div class="level-item is-flex">
+        <button class="button is-primary is-small mr-1" @click="decrementRangeClicked" :disabled="!hasPrevious()">
+          <font-awesome-icon icon="angle-left"></font-awesome-icon>
+        </button>
+        <div class="has-text-weight-semibold has-text-centered">{{getRangeText()}}</div>
+        <button class="button is-primary is-small ml-1" @click="incrementRangeClicked" :disabled="!hasNext()">
+          <font-awesome-icon icon="angle-right"></font-awesome-icon>
+        </button>
+      </div>
     </div>
     <div class="level-right">
-      <button class="button is-primary is-light is-small mr-1" @click="decrementRangeClicked" :disabled="!hasPrevious()">
-        <font-awesome-icon icon="angle-left"></font-awesome-icon>
-      </button>
-      <div class="level-item has-text-right">{{getRangeText()}}</div>
-      <button class="button is-primary is-light is-small ml-1" @click="incrementRangeClicked" :disabled="!hasNext()">
-        <font-awesome-icon icon="angle-right"></font-awesome-icon>
-      </button>
-    </div>
+      <div>
+        <span v-if="!loading" class="mr-2 has-text-primary">{{$tc('labels.reloadIn', countdown, {countdown}) }}</span>
+        <span v-else class="mr-2 has-text-primary">{{$t('labels.updating') }}</span></div>
+        <font-awesome-icon class="has-text-primary" icon="sync" :spin="loading"></font-awesome-icon>
+        <button class="button ml-2 is-primary is-small" @click="updateNow">
+          {{$t('labels.updateNow')}}
+        </button>
+      </div>
   </div>
 </template>
 
@@ -36,8 +45,18 @@ const PERIODS = [{
 }];
 
 const DATE_FORMAT = 'YYYY-MM-DD';
+const SECONDS_TO_RELOAD = 60;
 
 export default {
+  props: {
+    loading: Boolean,
+    seconds: {
+      type: Number,
+      default() {
+        return SECONDS_TO_RELOAD;
+      }
+    }
+  },
   data() {
     return {
       minDate: Vue.moment().subtract(6, 'month'),
@@ -46,6 +65,9 @@ export default {
       periods: PERIODS,
       months: [],
       weeks: [],
+      interval: null,
+      countdown: this.seconds,
+      countdownEnabled: true,
     };
   },
   computed: {
@@ -58,27 +80,24 @@ export default {
     end() {
       return this.date.clone().endOf(this.period);
     },
-    // months() {
-    //   return [
-    //     'Diciembre',
-    //     'Noviembre'
-    //   ]
-    // },
-    // weeks() {
-    //   return [
-
-    //   ];
-    // }
   },
   mounted() {
-    console.log(Vue.moment().get('week'));
     this.months = [11, 10, 9];
     this.weeks = [];
   },
+  beforeRouteLeave(to, from, next) {
+    console.log('interval cleared');
+    clearInterval(this.interval);
+    next();
+  },
   watch: {
+    loading(a, b) {
+      if (!this.loading) {
+        this.startCountDown();
+      }
+    },
     range() {
-      console.log(this.range);
-      this.$emit('range-change', this.range);
+      this.updateNow();
     }
   },
   methods: {
@@ -107,6 +126,23 @@ export default {
     },
     hasNext() {
       return this.date.clone().add(1, this.period).isBefore(Vue.moment());
+    },
+    startCountDown() {
+      clearInterval(this.interval);
+      this.countdown = this.seconds;
+      if (this.countdownEnabled) {
+        this.interval = setInterval(this.countdownCheck, 1000);
+      } 
+    },
+    countdownCheck() {
+      this.countdown--;
+      if (this.countdown <= 0) {
+        this.updateNow();
+      }
+    },
+    updateNow() {
+      clearInterval(this.interval);
+      this.$emit('range-change', this.range);
     },
   },
 }

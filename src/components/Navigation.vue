@@ -17,7 +17,7 @@
         <router-link class="navbar-item" to="/">{{$t('menu.home')}}</router-link>
         <router-link class="navbar-item" to="/alltime">{{$t('menu.alltime')}}</router-link>
         <router-link class="navbar-item" to="/aircrafts">{{$t('menu.aircrafts')}}</router-link>
-        <router-link class="navbar-item" to="/test">Test</router-link>
+        <!-- <router-link class="navbar-item" to="/test">Test</router-link> -->
 
         <!-- <div class="navbar-item has-dropdown is-hoverable">
           <a class="navbar-link">
@@ -81,7 +81,7 @@ export default {
   methods: {
     changeLocale(lang) {
       console.log('locale cahnged to', lang.locale);
-      Vue.moment.locale(lang.locale);
+      this.$moment.locale(lang.locale);
       this.lang = lang;
       this.$root.$i18n.locale = lang.locale
     }

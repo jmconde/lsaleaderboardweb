@@ -35,6 +35,9 @@ export const es = {
     totalFlights: 'Total de vuelos',
     lastFlight: 'Último vuelo',
     averageTotalFlights: 'Tiempo promedio',
+    reloadIn: 'Actualización en {countdown} seg | Actualización en {countdown} segs',
+    updating: 'Actualizando',
+    updateNow: 'Actualizar ahora',
   },
   range: {
     monthly: 'Mensual',

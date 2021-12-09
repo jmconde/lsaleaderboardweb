@@ -2,7 +2,7 @@
   <div>
     <div id="dashboard">
       <section class="pt-2">
-        <RangeSelector @range-change="rangeChanged" />
+        <RangeSelector @range-change="rangeChanged" :seconds="120" :loading="loading" />
         <div class="columns">
           <div class="column">
             <Widget>
@@ -142,6 +142,7 @@ export default{
       this.result = result;
       this.flightsByDay = result.flightsByDay;
       this.flightsByPilot = result.flightsByPilot;
+      this.loading = false;
     },
     getMetric(id, arrMetrics) {
       const obj = arrMetrics.find(d => d.id === id);

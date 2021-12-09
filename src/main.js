@@ -8,19 +8,22 @@ import lodash from 'lodash';
 import numeral from 'numeral';
 // import vueCompositionApi from "@vue/composition-api";
 import { library } from '@fortawesome/fontawesome-svg-core';
-import VueMoment from 'vue-moment'
+// import VueMoment from 'vue-moment'
 import { faCaretUp } from '@fortawesome/free-solid-svg-icons';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 import { faCaretRight } from '@fortawesome/free-solid-svg-icons';
 import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import { faAngleLeft } from '@fortawesome/free-solid-svg-icons';
+import { faSync } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 // import { ApolloClient } from 'apollo-client';
 // import { createHttpLink } from 'apollo-link-http';
 // import { InMemoryCache } from 'apollo-cache-inmemory'
 import { messages } from './i18n/messages';
+import 'leaflet/dist/leaflet.css';
 
-console.log(process.env.ROOT_GRAPHQL);
+const moment = require('moment');
+require('moment/locale/es');
 
 // const link = createHttpLink({
 //   uri: process.env.ROOT_GRAPHQL
@@ -43,17 +46,20 @@ library.add(faCaretDown);
 library.add(faCaretRight);
 library.add(faAngleRight);
 library.add(faAngleLeft);
+library.add(faSync);
 
-import 'leaflet/dist/leaflet.css';
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 // Vue.use(vueCompositionApi);
-Vue.use(VueMoment);
+Vue.use(require('vue-moment'), {
+  moment
+});
+Vue.moment.locale('es');
 console.log(Vue.moment().locale());
 Vue.moment.updateLocale("en", { week: {
   dow: 1, // First day of week is Monday
   doy: 4  // First week of year must contain 4 January (7 + 1 - 4)
 }});
-
+console.log(Vue.moment().format('MMMM'));
 // Vue.use(VueApollo);
 Vue.use(VueLodash, { lodash });
 // const apolloProvider = new VueApollo({
