@@ -15,31 +15,8 @@
 import VueApexCharts from "vue-apexcharts";
 import WidgetContentMixin from "../../mixins/WidgetContentMixin";
 import axios from "axios";
-import gql from 'graphql-tag';
 
 export default {
-  // apollo: {
-  //   $loadingKey: 'loading',
-  //   data: {
-  //     loading: 0,
-  //     query: gql`query ByDayQuery($month: Int!) {
-  //       monthlyFlightsByDay(month: $month) {
-  //         x
-  //         y
-  //       }
-  //     }`,
-  //     result() {
-  //       this.widgetInitialized();
-  //     },
-  //     variables() {
-  //       return  {
-  //         month: this.month
-  //       };
-  //     },
-  //     update: data => data.monthlyFlightsByDay,
-  //     pollInterval: 25000
-  //   }
-  // },
   props: {
     title: String,
     data: {
@@ -95,13 +72,13 @@ export default {
       stroke: {
         curve: "smooth",
         // dashArray: '20 5 10 5',
-        width: 3,
+        width: 2,
       },
       markers: {
         size: 0,
       },
       fill: {
-        type: "gradient",
+        // type: "gradient",
       },
       grid: {
         row: {
@@ -130,24 +107,25 @@ export default {
       return  this.$t(this.title);
     },
     series() {
-      const data = this.data.map((d) => d.y);
-      const data2 = this.data.map((d) => d.y - 1);
+      console.log(this.data);
+      const data = (this.data[0] || []).map((d) => d.y);
+      const data2 = (this.data[1] || []).map((d) => d.y);
       data.unshift(0);
       data2.unshift(0);
       const series = [
         {
-          name: "Flights",
+          name: this.$t('labels.flights'),
           data,
         },
-        // {
-        //   name: "Flights IVAO",
-        //   data: data2,
-        // },
+        {
+          name: this.$t('labels.ivaoFlights'),
+          data: data2,
+        },
       ];
       return series;
     },
     chartOptions() {
-      const categories = this.data.map((d) => d.x);
+      const categories = (this.data[0] || []).map((d) => d.x);
       categories.unshift('');
       const xaxis = {
         categories,

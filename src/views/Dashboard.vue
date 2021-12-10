@@ -85,8 +85,8 @@ export default{
       startDate: '2021-12-01',
       endDate: '2021-12-31',
       loading: true,
-      flightsByPilot: [],
-      flightsByDay: [],
+      flightsByPilot: [[], []],
+      flightsByDay: [[], []],
     }
   },
   components: {
@@ -140,9 +140,31 @@ export default{
       this.loading = true;
       const result = await request(process.env.ROOT_GRAPHQL,  GraphQLQueries.GQL_ALL_METRICS, this.range);
       this.result = result;
-      this.flightsByDay = result.flightsByDay;
-      this.flightsByPilot = result.flightsByPilot;
+      this.flightsByPilot = [result.flightsByPilot, this.ivaoFilghtsByPilot(result.ivaoMetrics, result.flightsByPilot)];
+      this.flightsByDay = [result.flightsByDay, this.ivaoFilghtsByDay(result.ivaoMetrics, result.flightsByDay)];
       this.loading = false;
+    },
+    ivaoFilghtsByDay(ivaoMetrics, byDay = []) {
+      if (!ivaoMetrics || !ivaoMetrics.byDay) {
+         return [];
+      }
+      return (byDay || []).map((fbd) => {
+        const c = ivaoMetrics.byDay.find(d => fbd.x === d.name);
+        const y = c ? this.getMetric('total_flights', c.metrics) : 0;
+        return { x: fbd.x, y };
+      });
+    },
+    ivaoFilghtsByPilot(ivaoMetrics, byPilot = []) {
+      if (!ivaoMetrics || !ivaoMetrics.byPilot) {
+         return [];
+      }
+      console.log('byPilot :>> ', ivaoMetrics.byPilot);
+      return (byPilot || []).map((fbd) => {
+        console.log('fbd.x :>> ', fbd.x);
+        const c = ivaoMetrics.byPilot.find(d => fbd.x === d.name);
+        const y = c ? this.getMetric('total_flights', c.metrics) : 0;
+        return { x: fbd.x, y };
+      });
     },
     getMetric(id, arrMetrics) {
       const obj = arrMetrics.find(d => d.id === id);

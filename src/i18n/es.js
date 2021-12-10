@@ -38,9 +38,12 @@ export const es = {
     reloadIn: 'Actualización en {countdown} seg | Actualización en {countdown} segs',
     updating: 'Actualizando',
     updateNow: 'Actualizar ahora',
+    flights: 'Vuelos',
+    ivaoFlights: 'Vuelos en IVAO',
   },
   range: {
     monthly: 'Mensual',
-    weekly: 'Semanal'
+    weekly: 'Semanal',
+    dayly: 'Diario',
   },
 }

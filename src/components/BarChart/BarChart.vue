@@ -12,34 +12,13 @@
 import VueApexCharts from "vue-apexcharts";
 import WidgetContentMixin from "../../mixins/WidgetContentMixin";
 import axios from "axios";
-import gql from 'graphql-tag';
 
 export default {
-  // apollo: {
-  //   data: {
-  //     query: gql`query ByDayPilot($month: Int!) {
-  //       monthlyFlightsByPilot(month: $month) {
-  //         x
-  //         y
-  //       }
-  //     }`,
-  //     result() {
-  //       this.widgetInitialized();
-  //     },
-  //     variables() {
-  //       return  {
-  //         month: this.month
-  //       };
-  //     },
-  //     update: data => data.monthlyFlightsByPilot,
-  //     pollInterval: 15*60*60
-  //   }
-  // },
   props: {
     title: String,
     data: {
       type: Array,
-      default: () => [],
+      default: () => [[], []],
     },
     height: {
       type: Number,
@@ -52,11 +31,7 @@ export default {
   mixins: [WidgetContentMixin],
   data() {
     return {
-      // series: [{
-      //   data: [400, 430, 448, 470, 540, 580, 690, 1100, 1200, 1380]
-      // }],
       month: new Date().getMonth(),
-      // data: [],
     };
   },
   computed: {
@@ -82,7 +57,7 @@ export default {
         plotOptions: {
           bar: {
             horizontal: true,
-            borderRadius: 8,
+            borderRadius: 1,
             columnWidth: '50%',
             endingShape: 'rounded'
           }
@@ -93,21 +68,22 @@ export default {
       }
     },
     series() {
+      console.log('this.data :>> ', this.data);
       const series = [
         {
-          name: 'Vuelos',
-          data: this.data.map((d) => d.y),
+          name: this.$t('labels.flights'),
+          data: this.data[0].map((d) => d.y),
         },
-        // {
-        //   name: 'Vuelos en IVAO',
-        //   data: this.data.map((d) => d.y),
-        // },
+        {
+          name: this.$t('labels.ivaoFlights'),
+          data: this.data[1].map((d) => d.y),
+        },
       ];
       return series;
     },
     chartOptions() {
       const xaxis = {
-        categories: this.data.map((d) => d.x),
+        categories: this.data[0].map((d) => d.x),
         // labels: {
         //   formatter: function(val) {
         //     return val.toFixed(0);

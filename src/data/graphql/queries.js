@@ -19,6 +19,14 @@ export const GraphQLQueries = {
           metric
         }
       }
+      byDay {
+        id
+        name
+        metrics {
+          id
+          metric
+        }
+      }
     },
     flightsByPilot: monthlyFlightsByPilot(start:$start, end:$end) {
       x

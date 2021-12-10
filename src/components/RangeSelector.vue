@@ -42,6 +42,9 @@ const PERIODS = [{
 }, {
   name: 'range.weekly',
   value: 'week'
+}, {
+  name: 'range.daily',
+  value: 'day'
 }];
 
 const DATE_FORMAT = 'YYYY-MM-DD';
@@ -109,6 +112,9 @@ export default {
           break;
         case 'week':
           text = `${this.start.format(DATE_FORMAT)} - ${this.end.format(DATE_FORMAT)}`
+          break;
+        case 'day':
+          text = `${this.start.format(DATE_FORMAT)}`
           break;
         default:
           break;
