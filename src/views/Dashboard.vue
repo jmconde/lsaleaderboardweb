@@ -4,57 +4,43 @@
       <section class="pt-2">
         <RangeSelector @range-change="rangeChanged" :seconds="120" :loading="loading" />
         <div class="columns">
-          <div class="column">
-            <Widget>
-              <Metric :title="$t('titles.totals')" :data="allMetricsData" ></Metric>
-            </Widget>
-          </div>
-          <div class="column">
-            <Widget>
-              <Metric :title="$t('titles.ivaoTotals')" :data="ivaoMetricsData" ></Metric>
-            </Widget>
-          </div>
-        </div>
-        <div class="tile is-ancestor">
-          <div class="tile is-parent ">
-            <div class="tile is-child">
-              <div class="notification is-light">
+          <div class="column is-two-thirds">
+            <div class="columns">
+              <div class="column">
                 <Widget>
-                  <LineChart :title="$t('titles.flightsByDay')" :data="flightsByDay" :height="250"></LineChart>
+                  <Metric :title="$t('titles.totals')" :data="allMetricsData" ></Metric>
                 </Widget>
               </div>
-              <div class="notification is-light">
+              <div class="column">
                 <Widget>
-                  <BarChart :title="$t('titles.flightsByPilot')" :data="flightsByPilot" :height="350"></BarChart>
+                  <Metric :title="$t('titles.ivaoTotals')" :data="ivaoMetricsData" ></Metric>
                 </Widget>
               </div>
             </div>
-          </div>
-          <div class="tile is-parent is-4">
-            <div class="tile is-child">
+            <div class="columns">
+              <div class="column">
+                <Metric :title="$t('labels.ivaoFlightsNoAcars')" :data="outsideVAData" />
+              </div>
+              <div class="column is-two-thirds">
+                <div class="notification is-light">
+                  <Widget>
+                    <LineChart :title="$t('titles.flightsByDay')" :data="flightsByDay" :height="250"></LineChart>
+                  </Widget>
+                </div>
+              </div>
+            </div>
+            <div class="notification is-light">
               <Widget>
-                <OnlineActivity></OnlineActivity>
+                <BarChart :title="$t('titles.flightsByPilot')" :data="flightsByPilot" :height="350"></BarChart>
               </Widget>
             </div>
           </div>
+          <div class="column">
+            <Widget>
+              <OnlineActivity></OnlineActivity>
+            </Widget>
+          </div>
         </div>
-            <!-- <div class="tile is-child">
-              <h6 class="title is-6">All time ranking</h6>
-              <div>
-              </div>
-            </div> -->
-          <!-- <div class="tile is-parent is-vertical is-4">
-            <div class="tile is-child">
-                
-                <Widget>
-                  <LineChart height="250"></LineChart>
-                </Widget>
-                
-                <Widget>
-                  <OnlineActivity></OnlineActivity>
-                </Widget>
-            </div>
-          </div> -->
       </section>
     </div>
   </div>
@@ -119,6 +105,13 @@ export default{
       }
       return this.getMetricData(ivaoMetrics.all)
     },
+    outsideVAData() {
+      const { outsideVA } =  this.result;
+       if (!outsideVA || !outsideVA.all) {
+         return;
+      }
+      return this.getOutsideVAData(outsideVA.all);
+    },
     range() {
       return {
         start: this.start,
@@ -158,9 +151,7 @@ export default{
       if (!ivaoMetrics || !ivaoMetrics.byPilot) {
          return [];
       }
-      console.log('byPilot :>> ', ivaoMetrics.byPilot);
       return (byPilot || []).map((fbd) => {
-        console.log('fbd.x :>> ', fbd.x);
         const c = ivaoMetrics.byPilot.find(d => fbd.x === d.name);
         const y = c ? this.getMetric('total_flights', c.metrics) : 0;
         return { x: fbd.x, y };
@@ -172,10 +163,21 @@ export default{
     },
     
     rangeChanged(range) {
-      console.log('rangeChanged', range);
       this.startDate = range[0];
       this.endDate = range[1];
       this.doQuery();
+    },
+    getOutsideVAData(data) {
+      return  {
+        main: [{
+          label: this.$t('labels.registeredPilot'),
+          value: this.getMetric('total_flights', data),
+        }], //"total_flights_unregisterd"
+        secondary: [{
+          label: this.$t('labels.unregisteredPilot'),
+          value: this.getMetric('total_flights_unregisterd', data),
+        }]
+      };
     },
     getMetricData(data) {
       return {

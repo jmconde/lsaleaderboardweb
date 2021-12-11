@@ -36,6 +36,12 @@ export const GraphQLQueries = {
       x
       y
     }
+    outsideVA: getIvaoNotInAirlineMetrics(start:$start, end:$end){
+      all {
+        metric
+        id
+      }
+    }
   }`,
 
   GQL_IVAO_METRICS: gql`query getIvaoMetrics($start: String!, $end: String!) {
@@ -106,6 +112,31 @@ export const GraphQLQueries = {
         landingRate
         state
         status
+      }
+    }
+  }`,
+
+  GQL_IVAO_FLIGHTS_OUTSIDE_VA: gql`query test($start:String!, $end:String!){
+    getIvaoNotInAirlineMetrics(start:$start, end:$end){
+      all {
+        metric
+        id
+      }
+      byPilot {
+        id
+        name
+        metrics {
+          id
+          metric
+        }
+      }
+      byDay {
+        id
+        name
+        metrics {
+          id
+          metric
+        }
       }
     }
   }`,

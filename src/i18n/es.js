@@ -40,10 +40,13 @@ export const es = {
     updateNow: 'Actualizar ahora',
     flights: 'Vuelos',
     ivaoFlights: 'Vuelos en IVAO',
+    ivaoFlightsNoAcars: 'Vuelos en IVAO sin ACARS',
+    registeredPilot: 'Pilotos registrados',
+    unregisteredPilot: 'No registrados',
   },
   range: {
     monthly: 'Mensual',
     weekly: 'Semanal',
-    dayly: 'Diario',
+    daily: 'Diario',
   },
 }

@@ -40,6 +40,9 @@ export const en = {
     updateNow: 'Update Now',
     flights: 'Flights',
     ivaoFlights: 'IVAO Flights',
+    ivaoFlightsNoAcars: 'IVAO no ACARS',
+    registeredPilot: 'Registered Pilots',
+    unregisteredPilot: 'Unregistered Pilots',
   },
   range: {
     monthly: 'Monthly',

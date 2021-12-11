@@ -96,7 +96,7 @@ module.exports = {
       favicon: "./public/favicon.ico",
     }),
     new CleanWebpackPlugin(),
-    new webpack.EnvironmentPlugin(['ROOT_API', 'STATICS_HOST', 'ROOT_GRAPHQL']),
+    new webpack.EnvironmentPlugin(['ROOT_API', 'STATICS_HOST', 'ROOT_GRAPHQL', 'GTAG_ID', 'ENVIRONMENT']),
   ],
   resolve: {
     alias: {
