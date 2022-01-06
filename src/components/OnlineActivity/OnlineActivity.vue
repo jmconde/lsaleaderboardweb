@@ -90,7 +90,8 @@ export default {
         });
         this.loop();
       } catch(err) {
-        this.widgetFailed();
+        // this.widgetFailed();
+        this.loop();
       }
     }
   },

@@ -28,11 +28,19 @@ export const GraphQLQueries = {
         }
       }
     },
-    flightsByPilot: monthlyFlightsByPilot(start:$start, end:$end) {
+    flightsByPilot:getFlightsByPilot(start:$start, end:$end) {
       x
       y
     }
-    flightsByDay: monthlyFlightsByDay(start:$start, end:$end) {
+    flightsByDay:getFlightsByDay(start:$start, end:$end) {
+      x
+      y
+    }
+    timeByPilot:getTimeByPilot(start:$start, end:$end) {
+      x
+      y
+    }
+    timeByDay:getTimeByDay(start:$start, end:$end) {
       x
       y
     }
@@ -62,14 +70,28 @@ export const GraphQLQueries = {
   }`,
 
   GQL_FLIGHTS_BY_PILOT:  gql`query getFlightsByPilot ($start: String!, $end: String!) {
-    flightsByPilot: monthlyFlightsByPilot(start:$start, end:$end) {
+    flightsByPilot: getFlightsByPilot(start:$start, end:$end) {
       x
       y
     }
   }`,
 
   GQL_FLIGHTS_BY_DAY:  gql`query getFlightsByDay ($start: String!, $end: String!) {
-    flightsByDay: monthlyFlightsByDay(start:$start, end:$end) {
+    flightsByDay: getFlightsByDay(start:$start, end:$end) {
+      x
+      y
+    }
+  }`,
+  GQL_TIME_BY_PILOT:  gql`query getTimeByPilot ($start: String!, $end: String!) {
+    timeByPilot:getTimeByPilot(start:$start, end:$end) {
+      x
+      y
+    }
+  }`,
+
+  GQL_TIME_BY_DAY:  gql`query getTimeByDay ($start: String!, $end: String!) {
+    
+    timeByDay:getTimeByDay(start:$start, end:$end) {
       x
       y
     }

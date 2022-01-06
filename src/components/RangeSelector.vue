@@ -20,12 +20,12 @@
     </div>
     <div class="level-right">
       <div>
-        <span v-if="!loading" class="mr-2 has-text-primary">{{$tc('labels.reloadIn', countdown, {countdown}) }}</span>
-        <span v-else class="mr-2 has-text-primary">{{$t('labels.updating') }}</span></div>
-        <font-awesome-icon class="has-text-primary" icon="sync" :spin="loading"></font-awesome-icon>
-        <button class="button ml-2 is-primary is-small" @click="updateNow">
-          {{$t('labels.updateNow')}}
-        </button>
+        <span v-if="!loading" class="mr-1 has-text-primary">{{$tc('labels.reloadIn', countdown, {countdown}) }}</span>
+        <span v-else class="mr-1 has-text-primary">{{$t('labels.updating') }}</span></div>
+        
+        <a class="button is-white is-small is-rounded" @click="updateNow">
+         <font-awesome-icon class="has-text-primary" icon="sync" :spin="loading"></font-awesome-icon>
+        </a>
       </div>
   </div>
 </template>

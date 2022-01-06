@@ -19,23 +19,41 @@
             </div>
             <div class="columns">
               <div class="column">
-                <Metric :title="$t('labels.ivaoFlightsNoAcars')" :data="outsideVAData" />
-              </div>
-              <div class="column is-two-thirds">
                 <div class="notification is-light">
-                  <Widget>
-                    <LineChart :title="$t('titles.flightsByDay')" :data="flightsByDay" :height="250"></LineChart>
-                  </Widget>
+                  <PieChart :title="$t('titles.ivaoHoursPercentage')" :data="hoursPieChart" :height="350"></PieChart>
+                </div>
+              </div>
+              <div class="column">
+                <div class="notification is-light">
+                  <BarChart stacked :title="$t('titles.hoursByDay')" :floatPrecision="2" :data="timeByDay" :height="350"></BarChart>
+                  
                 </div>
               </div>
             </div>
-            <div class="notification is-light">
-              <Widget>
-                <BarChart :title="$t('titles.flightsByPilot')" :data="flightsByPilot" :height="350"></BarChart>
-              </Widget>
+            <div class="columns">
+              <div class="column">
+                <div class="notification is-light">
+                  <BarChart horizontal stacked :title="$t('titles.flightsByPilot')" :data="flightsByPilot" :height="350"></BarChart>
+                </div>
+              </div>
+              <div class="column">
+                <div class="notification is-light">
+                  <BarChart horizontal stacked :title="$t('titles.hoursByPilot')" :floatPrecision="2" :data="timeByPilot" :height="350"></BarChart>
+                </div>
+              </div>
             </div>
+            <!-- <div class="columns">
+              <div class="column">
+              </div>
+              <div class="column">
+                <div class="notification is-light">
+                  <BarChart stacked :title="$t('titles.flightsByDay')" :data="flightsByDay" :height="350"></BarChart>
+                </div>
+              </div>
+            </div> -->
           </div>
           <div class="column">
+            <Metric :title="$t('labels.ivaoFlightsNoAcars')" :data="outsideVAData" />
             <Widget>
               <OnlineActivity></OnlineActivity>
             </Widget>
@@ -53,13 +71,14 @@ import OnlineActivity from '../components/OnlineActivity/OnlineActivity.vue';
 import PilotsList from '../components/PilotsList/PilotsList.vue';
 import LeafletMap from '../components/LeafletMap/LeafletMap.vue';
 import Widget from '../components/Widget.vue';
-import LineChart from '../components/LineChart/LineChart.vue';
-import BarChart from '../components/BarChart/BarChart.vue';
 import Metric from '../components/Metric.vue';
 import RangeSelector from '../components/RangeSelector.vue';
+import PieChart from '../components/charts/PieChart.vue';
+import BarChart from '../components/charts/BarChart.vue';
 
 import { GraphQLQueries } from '../data/graphql/queries';
-import { request } from 'graphql-request'
+import { request } from 'graphql-request';
+import { flightsByPilotMapper, timeByPilotMapper, flightsByDayMapper, timeByDayMapper } from '../data/mappers/BarChartMappers';
 
 export default{
   data() {
@@ -68,11 +87,13 @@ export default{
       period: 'month',
       date: new Date(),
       version: window.__GLOBALS.version,
-      startDate: '2021-12-01',
-      endDate: '2021-12-31',
+      startDate: Vue.moment().startOf('month').format('YYYY-MM-DD'),
+      endDate: Vue.moment().endOf('month').format('YYYY-MM-DD'),
       loading: true,
-      flightsByPilot: [[], []],
-      flightsByDay: [[], []],
+      flightsByPilot: [],
+      flightsByDay: [],
+      timeByPilot: [],
+      timeByDay: [],
     }
   },
   components: {
@@ -81,16 +102,35 @@ export default{
     PilotsList,
     LeafletMap,
     Widget,
-    LineChart,
-    BarChart,
     Metric,
     RangeSelector,
+    PieChart,
+    BarChart,
   },
   mounted() {
     this.doQuery();
   },
   computed:{
      //:metrics-id="['total_time', 'total_time', 'total_time']" :name="['Total flights', 'Total flights', 'Total flights']"
+    hoursPieChart() {
+      const { allMetrics, ivaoMetrics } =  this.result;
+      // if (!allMetrics || !ivaoMetrics.all) {
+      //   console.log('entered here!');
+      //   return [];
+      // }
+      const a =  this.getMetric('total_time', allMetrics);
+      const b =  this.getMetric('total_time', ivaoMetrics.all);
+      return [
+        {
+          label: this.$t('labels.ivaoFlights'),
+          value: b / 60,
+        },
+        {
+          label: this.$t('labels.flights'),
+          value: (a - b) / 60,
+        },
+      ];
+    },
     allMetricsData() {
       const { allMetrics } =  this.result;
       if (!allMetrics) {
@@ -119,7 +159,7 @@ export default{
       }
     },
     start() {
-       return Vue.moment(this.startDate).startOf('day').format('YYYY-MM-DD HH:mm:ss');
+       return Vue.moment(this.startDate, 'YYYY-MM-DD').startOf('day').format('YYYY-MM-DD HH:mm:ss');
     },
     end() {
        return Vue.moment(this.endDate, 'YYYY-MM-DD').endOf('day').format('YYYY-MM-DD HH:mm:ss');
@@ -133,29 +173,12 @@ export default{
       this.loading = true;
       const result = await request(process.env.ROOT_GRAPHQL,  GraphQLQueries.GQL_ALL_METRICS, this.range);
       this.result = result;
-      this.flightsByPilot = [result.flightsByPilot, this.ivaoFilghtsByPilot(result.ivaoMetrics, result.flightsByPilot)];
-      this.flightsByDay = [result.flightsByDay, this.ivaoFilghtsByDay(result.ivaoMetrics, result.flightsByDay)];
+      this.flightsByPilot = flightsByPilotMapper(this.result);
+      this.timeByPilot = timeByPilotMapper(this.result);
+      this.flightsByDay = flightsByDayMapper(this.result);
+      this.timeByDay = timeByDayMapper(this.result)
       this.loading = false;
-    },
-    ivaoFilghtsByDay(ivaoMetrics, byDay = []) {
-      if (!ivaoMetrics || !ivaoMetrics.byDay) {
-         return [];
-      }
-      return (byDay || []).map((fbd) => {
-        const c = ivaoMetrics.byDay.find(d => fbd.x === d.name);
-        const y = c ? this.getMetric('total_flights', c.metrics) : 0;
-        return { x: fbd.x, y };
-      });
-    },
-    ivaoFilghtsByPilot(ivaoMetrics, byPilot = []) {
-      if (!ivaoMetrics || !ivaoMetrics.byPilot) {
-         return [];
-      }
-      return (byPilot || []).map((fbd) => {
-        const c = ivaoMetrics.byPilot.find(d => fbd.x === d.name);
-        const y = c ? this.getMetric('total_flights', c.metrics) : 0;
-        return { x: fbd.x, y };
-      });
+      console.log('<-->', timeByDayMapper(this.result));
     },
     getMetric(id, arrMetrics) {
       const obj = arrMetrics.find(d => d.id === id);

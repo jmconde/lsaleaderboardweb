@@ -4,9 +4,12 @@ export const en = {
     ivaoTotals: 'IVAO Totals',
     flightsByDay: 'Flights by Day',
     flightsByPilot: 'Flights by Pilot',
+    hoursByDay: 'Hours by Day',
+    hoursByPilot: 'Hours by Pilot',
     onlineActivity: 'Online Pilots',
     aircraftList: 'Aircraft list',
     alltime: 'All time stats',
+    ivaoHoursPercentage: 'IVAO hours percentage',
   },
   menu: {
     home: 'Home',

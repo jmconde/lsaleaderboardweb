@@ -4,7 +4,7 @@
       <h1>Loading {{loading}}</h1>
     </div> -->
     <apexchart
-      type="bar"
+      type="line"
       :height="this.height"
       :options="chartOptions"
       :series="series"
@@ -46,87 +46,87 @@ export default {
   computed: {
     baseChartOptions() {
       return {
-        colors: ['#F3AD41', '#967756',],
+        colors: ['#967756', '#F3AD41'],
         chart: {
-          fontFamily: 'Open Sans, sans-serif',
-          toolbar: {
-            show: false,
-          },
-          height: this.height,
-          type: "bar",
-          stacked: true,
+        fontFamily: 'Open Sans, sans-serif',
+        toolbar: {
+          show: false,
         },
-        title: {
-          text: this.title,
-          align: 'center',
-          margin: 0,
-          style: {
-            fontSize: '16px'
-          },
-        },
-        plotOptions: {
-          bar: {
-            horizontal: false,
-            borderRadius: 1,
-            columnWidth: '50%',
-            endingShape: 'rounded'
-          }
-        },
-        dataLabels: {
+        height: this.height,
+        type: "line",
+        zoom: {
           enabled: false,
         },
-        tooltip: {
-          theme: 'dark',
-          x: {
-            show: false,
-          },
-          y: {
-            formatter: function(val) {
-              return val.toFixed(0);
-            },
+      },
+      title: {
+        text: this.title,
+        align: 'center',
+        margin: 0,
+        style: {
+          fontSize: '16px'
+        },
+      },
+      dataLabels: {
+        enabled: false,
+      },
+      stroke: {
+        curve: "stepline",
+        // dashArray: '20 5 10 5',
+        width: 2,
+      },
+      markers: {
+        size: 0,
+      },
+      fill: {
+        // type: "gradient",
+      },
+      grid: {
+        row: {
+          colors: ["#f3f3f3", "transparent"], // takes an array which will be repeated on columns
+          opacity: 0.5,
+        },
+      },
+      yaxis: {
+        show: true,
+        axisBorder: {
+          show: false
+        },
+        labels: {
+          style: {
+            fontFamily: 'Open Sans, sans-serif'
           }
-        },
-        yaxis: {
-          show: true,
-          axisBorder: {
-            show: false
-          },
-          labels: {
-            style: {
-              fontFamily: 'Open Sans, sans-serif'
-            },
-            formatter: function(val) {
-              console.log(typeof val);
-              return val.toFixed(0);
-            },
-          } 
-        },
-        xaxis: {
-          categories: [],
-        },
+        } 
+      },
+      xaxis: {
+        categories: []
+      },
       }
     },
     titleTranslated() {
+      console.log(this.title);
       return  this.$t(this.title);
     },
     series() {
-      const data = (this.data[0] || []).map((d, i) => d.y - this.data[1][i].y);
+      console.log(this.data);
+      const data = (this.data[0] || []).map((d) => d.y);
       const data2 = (this.data[1] || []).map((d) => d.y);
+      data.unshift(0);
+      data2.unshift(0);
       const series = [
-        {
-          name: this.$t('labels.ivaoFlights'),
-          data: data2,
-        },
         {
           name: this.$t('labels.flights'),
           data,
+        },
+        {
+          name: this.$t('labels.ivaoFlights'),
+          data: data2,
         },
       ];
       return series;
     },
     chartOptions() {
       const categories = (this.data[0] || []).map((d) => d.x);
-      // categories.unshift('');
+      categories.unshift('');
       const xaxis = {
         categories,
         tickAmount: 15,
