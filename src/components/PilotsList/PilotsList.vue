@@ -22,7 +22,7 @@ export default {
   },
   methods: {
     async loadData() {
-      console.log('this.$parent :>> ', this.$parent);
+      // console.log('this.$parent :>> ', this.$parent);
       // this.widgetLoading();
       this.$emit('loading', { id: this.id });
       try {
@@ -30,7 +30,7 @@ export default {
         const { pilots, lastUpdated, version } = data;
         this.pilots = pilots;
         // this.widgetLoaded();
-        console.log('this.pilots :>> ', this.pilots);
+        // console.log('this.pilots :>> ', this.pilots);
       } catch(err){
         // this.widgetFailed();
       }
@@ -46,7 +46,7 @@ export default {
     showRoute(pilot) {
        const latlng1 = latLng(pilot._decorators._location.lat, pilot._decorators._location.lon);
        const latlng2 = latLng(pilot._decorators._previousLocation.lat, pilot._decorators._previousLocation.lon);
-        console.log(latlng1, latlng2);
+        // console.log(latlng1, latlng2);
        this.$emit('show-map', {
         type: 'route',
         markers: [{
