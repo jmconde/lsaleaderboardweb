@@ -17,19 +17,25 @@
             {{d.airline.icao}}{{d.flight_number}}
           </small></p>
           <p class="is-size-7 has-text-left has-text-weight-light" ><small>
+          {{d.status_text}}
+          </small></p>
+          <p class="is-size-7 has-text-left has-text-weight-light" ><small>
             {{d.aircraft.icao}} {{d.aircraft.registration}}
           </small></p>
         </div>
-         <div class="level mb-0">
+         <div class="level mb-0 is-relative">
             <div class="is-size-4 has-text-weight-light">{{d.dpt_airport_id}}</div>
-            <progress class="progress is-small mb-0 mt-0 ml-1 mr-1" :value="percentageCompleted(d.planned_distance.nmi, d.distance.nmi)" max="100">{{round(d.distance.nmi)}} - {{round(d.planned_distance.nmi)}}</progress>
-           <div class="is-size-4 has-text-weight-light">{{d.arr_airport_id}}</div>
+            <progress class="progress is-small mb-0 mt-0 ml-1 mr-1" :value="percentageCompleted(d.planned_distance.nmi, d.distance.nmi)" max="100">
+            </progress>
+            <div class="is-size-4 has-text-weight-light">{{d.arr_airport_id}}</div>
+            <div class="distance"><small>{{round(d.distance.nmi)}}nm / {{round(d.planned_distance.nmi)}}nm</small></div>
          </div>        
 
         <div class="level mb-0">
-          <span class="is-size-7 is-italic">{{d.status_text}}</span>
-          <div class="is-size-7 has-text-weight-semibold"><small>{{round(d.distance.nmi)}}nm / {{round(d.planned_distance.nmi)}}nm</small></div>
-          <span class="is-size-7 is-italic"><small>Fuel: {{d.aircraft.fuel_onboard}}</small></span>
+           <span class="is-size-7"><small class="is-uppercase has-text-weight-semibold">Altitude</small><br/>{{d.position.altitude | formatNumber}} ft</span>
+           <span class="is-size-7"><small class="is-uppercase has-text-weight-semibold">Heading</small><br/>{{d.position.heading}}&#186; </span>
+           <span class="is-size-7"><small class="is-uppercase has-text-weight-semibold">Ground Speed</small><br/>{{d.position.gs}} kt </span>
+           <span class="is-size-7 "><small class="is-uppercase has-text-weight-semibold">Vertical Speed</small><br/>{{d.position.vs}} ft/min </span>
         </div>
         <p class="is-size-7 has-text-weight-light"><small>{{d.route}}</small></p>
 
@@ -44,7 +50,12 @@
 </template>
 
 <style lang="scss">
-  
+  .distance {
+    color: #fdfdfd;
+    position: absolute;
+    width: 100%;
+    font-size: 80%;
+  }
 </style>
 
 <script>
