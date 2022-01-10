@@ -120,14 +120,35 @@ export const GraphQLQueries = {
       name
       rankId
       rankName
-      location
+      location {
+        id
+        lat
+        lon
+        name
+        location
+        country
+      }
       flights
       flightTime
       country
       lastFlight{
         pilotId
-        departure
-        arrival
+        departure {
+          id
+          lat
+          lon
+          name
+          location
+          country
+        }
+        arrival {
+          id
+          lat
+          lon
+          name
+          location
+          country
+        }
         time
         distance
         date
@@ -160,6 +181,27 @@ export const GraphQLQueries = {
           metric
         }
       }
+    }
+  }`,
+
+  GQL_LIVEMAP_DATA: gql`query getLiveMapData {
+    pilots:getActivePilotList {
+      id
+      pilotId
+      name
+      rankId
+      rankName
+      location {
+        id
+        lat
+        lon
+        name
+        location
+        country
+      }
+      flights
+      flightTime
+      country
     }
   }`,
 };

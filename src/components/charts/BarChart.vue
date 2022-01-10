@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="!noData">
     <apexchart
       type="bar"
       :height="this.height"
@@ -11,6 +11,7 @@
 <script>
   import VueApexCharts from "vue-apexcharts";
   import { BASE_COLORS } from '../../data/constants';
+  import isEmpty from 'lodash/isEmpty';
 
   export default {
     props: {
@@ -44,6 +45,9 @@
       };
     },
     computed: {
+      noData() {
+        return isEmpty(this.data);
+      },
       baseChartOptions() {
         return {
           colors: BASE_COLORS,
@@ -87,16 +91,16 @@
         }
       },
       series() {
-        console.log(this.data);
         return this.data.map(d => ({
           name: this.$t(d.label),
           data: d.series, 
         }));
       },
       chartOptions() {
+        const categories = isEmpty(this.data) ? [] : this.data[0].series.map((d) => d.x);
         if (this.horizontal) {
           const xaxis = {
-            categories: this.data[0].series.map((d) => d.x),
+            categories,
             tickAmount: 'dataPoints',
             labels: {
               formatter: this.formatterFn
@@ -105,7 +109,7 @@
           return { ...this.baseChartOptions, ...{ xaxis } };
         } else {
           const xaxis = {
-            categories: this.data[0].series.map((d) => d.x),
+            categories,
             tickAmount: 'dataPoints',
             tooltip: {
               enabled: false

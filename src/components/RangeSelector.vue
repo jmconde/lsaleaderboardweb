@@ -2,7 +2,7 @@
   <div class="level">
     <div class="level-left">
       <div class="level-item select is-primary is-light isx-rounded is-small">
-        <select v-model="period">
+        <select @change="onOptionChange">
           <option v-for="option in periods" :value="option.value" :key="option.value">
             {{$t(option.name)}}
           </option>
@@ -35,10 +35,16 @@
 
 <script>
 import Vue from 'vue';
+import { createNamespacedHelpers  } from 'vuex';
+
+const { mapGetters, mapState, mapActions } = createNamespacedHelpers('daterange');
 
 const PERIODS = [{
   name: 'range.monthly',
   value: 'month'
+}, {
+  name: 'range.quarter',
+  value: 'quarter'
 }, {
   name: 'range.weekly',
   value: 'week'
@@ -63,8 +69,8 @@ export default {
   data() {
     return {
       minDate: Vue.moment().subtract(6, 'month'),
-      date: Vue.moment(),
-      period: 'month',
+      // date: Vue.moment(),
+      // period: 'month',
       periods: PERIODS,
       months: [],
       weeks: [],
@@ -74,27 +80,25 @@ export default {
     };
   },
   computed: {
-    range() {
-      return [ this.start.format(DATE_FORMAT), this.end.format(DATE_FORMAT)];
-    }, 
-    start() {
-      return this.date.clone().startOf(this.period);
-    },
-    end() {
-      return this.date.clone().endOf(this.period);
-    },
+    ...mapState({
+      period: state => state.period,
+      date: state => state.date,
+    }),
+    ...mapGetters([
+      'range'
+    ])
   },
   mounted() {
     this.months = [11, 10, 9];
     this.weeks = [];
+    this.startCountDown();
   },
   beforeRouteLeave(to, from, next) {
-    console.log('interval cleared');
     clearInterval(this.interval);
     next();
   },
   watch: {
-    loading(a, b) {
+    loading() {
       if (!this.loading) {
         this.startCountDown();
       }
@@ -104,17 +108,23 @@ export default {
     }
   },
   methods: {
+    ...mapActions([
+      'changeDate',
+      'changePeriod'
+    ]),
     getRangeText() {
       let text = '';
       switch (this.period) {
         case 'month':
-          text = this.date.format('MMMM');
+          const month = this.date.format('MMM').toLowerCase();
+          text = this.$t(`months.${month}`);
           break;
+        case 'quarter':
         case 'week':
-          text = `${this.start.format(DATE_FORMAT)} - ${this.end.format(DATE_FORMAT)}`
+          text = `${this.range[0]} - ${this.range[1]}`
           break;
         case 'day':
-          text = `${this.start.format(DATE_FORMAT)}`
+          text = `${this.range[0]}`
           break;
         default:
           break;
@@ -122,12 +132,12 @@ export default {
       return text;
     },
     decrementRangeClicked() {
-      this.date = this.date.clone().subtract(1, this.period);
+      this.changeDate(this.date.clone().subtract(1, this.period));
     },
     incrementRangeClicked() {
-      this.date = this.date.clone().add(1, this.period);
+      this.changeDate(this.date.clone().add(1, this.period));
     },
-    hasPrevious() {
+    hasPrevious() {      
       return this.date.clone().subtract(1, this.period).isAfter(this.minDate);
     },
     hasNext() {
@@ -149,6 +159,9 @@ export default {
     updateNow() {
       clearInterval(this.interval);
       this.$emit('range-change', this.range);
+    },
+    onOptionChange(evt) {
+      this.changePeriod(evt.target.value);
     },
   },
 }

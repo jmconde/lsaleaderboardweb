@@ -15,6 +15,7 @@ export const en = {
     home: 'Home',
     alltime: 'All time stats',
     aircrafts: 'Aircrafts',
+    livemap: 'Live Map',
   },
   metrics: {
     flightHours: 'Flight Hours',
@@ -50,6 +51,21 @@ export const en = {
   range: {
     monthly: 'Monthly',
     weekly: 'Weekly',
+    quarter: 'Quarter',
     daily: 'Daily',
+  },
+  months: {
+    jan: 'January',
+    feb: 'February',
+    mar: 'March',
+    apr: 'April',
+    may: 'May',
+    jun: 'June',
+    jul: 'July',
+    aug: 'August',
+    sep: 'September',
+    oct: 'October',
+    nov: 'November',
+    dec: 'December',
   },
 }

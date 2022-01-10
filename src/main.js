@@ -6,6 +6,9 @@ import VueI18n from "vue-i18n";
 import lodash from 'lodash';
 import numeral from 'numeral';
 import VueGtag from "vue-gtag";
+
+import store from './store'
+
 // import vueCompositionApi from "@vue/composition-api";
 import { library } from '@fortawesome/fontawesome-svg-core';
 // import VueMoment from 'vue-moment'
@@ -62,6 +65,7 @@ Vue.filter("formatNumber", function (value) {
 });
 
 new Vue({
+  store: store(),
   router,
   i18n,
   render: (h) => h(App),

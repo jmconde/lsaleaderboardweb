@@ -30,6 +30,7 @@
             <div class="is-size-4 has-text-weight-light">{{d.arr_airport_id}}</div>
             <div class="distance"><small>{{round(d.distance.nmi)}}nm / {{round(d.planned_distance.nmi)}}nm</small></div>
          </div>        
+        <p class="is-size-7 has-text-weight-light"><small>{{d.route}}</small></p>
 
         <div class="level mb-0">
            <span class="is-size-7"><small class="is-uppercase has-text-weight-semibold">Altitude</small><br/>{{d.position.altitude | formatNumber}} ft</span>
@@ -37,7 +38,6 @@
            <span class="is-size-7"><small class="is-uppercase has-text-weight-semibold">Ground Speed</small><br/>{{d.position.gs}} kt </span>
            <span class="is-size-7 "><small class="is-uppercase has-text-weight-semibold">Vertical Speed</small><br/>{{d.position.vs}} ft/min </span>
         </div>
-        <p class="is-size-7 has-text-weight-light"><small>{{d.route}}</small></p>
 
         
       </div>
@@ -51,7 +51,7 @@
 
 <style lang="scss">
   .distance {
-    color: #fdfdfd;
+    color: #aaa;
     position: absolute;
     width: 100%;
     font-size: 80%;

@@ -79,6 +79,7 @@ import BarChart from '../components/charts/BarChart.vue';
 import { GraphQLQueries } from '../data/graphql/queries';
 import { request } from 'graphql-request';
 import { flightsByPilotMapper, timeByPilotMapper, flightsByDayMapper, timeByDayMapper } from '../data/mappers/BarChartMappers';
+import isEmpty from 'lodash/isEmpty';
 
 export default{
   data() {
@@ -113,11 +114,10 @@ export default{
   computed:{
      //:metrics-id="['total_time', 'total_time', 'total_time']" :name="['Total flights', 'Total flights', 'Total flights']"
     hoursPieChart() {
+      if (isEmpty(this.result)) {
+        return [];
+      }
       const { allMetrics, ivaoMetrics } =  this.result;
-      // if (!allMetrics || !ivaoMetrics.all) {
-      //   console.log('entered here!');
-      //   return [];
-      // }
       const a =  this.getMetric('total_time', allMetrics);
       const b =  this.getMetric('total_time', ivaoMetrics.all);
       return [
@@ -178,9 +178,8 @@ export default{
       this.flightsByDay = flightsByDayMapper(this.result);
       this.timeByDay = timeByDayMapper(this.result)
       this.loading = false;
-      console.log('<-->', timeByDayMapper(this.result));
     },
-    getMetric(id, arrMetrics) {
+    getMetric(id, arrMetrics = []) {
       const obj = arrMetrics.find(d => d.id === id);
       return obj ? obj.metric : NaN;
     },

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="!noData">
     <apexchart
       type="pie"
       :height="this.height"
@@ -13,6 +13,7 @@
 <script>
   import VueApexCharts from "vue-apexcharts";
   import { BASE_COLORS } from '../../data/constants';
+  import isEmpty from 'lodash/isEmpty';
 
   export default {
     props: {
@@ -33,10 +34,10 @@
       return {
       };
     },
-    mounted() {
-      console.log(this.chartOptions);
-    },
     computed: {
+      noData() {
+        return isEmpty(this.data);
+      },
       series() {
         return this.data.map(d => d.value);
       },
@@ -60,7 +61,6 @@
           tooltip: {
              y: {
               formatter: function(val) {
-                console.log('->', typeof val);
                 return val.toFixed(1) + " hrs"
               },
               title: {
