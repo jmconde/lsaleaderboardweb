@@ -105,7 +105,9 @@ export const GraphQLQueries = {
       registration
       state
       status
-      location
+      location {
+        id
+      }
       fleet
       hub
       flightTime
@@ -132,7 +134,9 @@ export const GraphQLQueries = {
       flightTime
       country
       lastFlight{
-        pilotId
+        pilot {
+          id
+        }
         departure {
           id
           lat
@@ -151,7 +155,6 @@ export const GraphQLQueries = {
         }
         time
         distance
-        date
         landingRate
         state
         status
@@ -204,4 +207,33 @@ export const GraphQLQueries = {
       country
     }
   }`,
+
+  GQL_FLIGHT_LOG: gql`query getLogFlights($start: String!, $end: String!) {
+    log:getLogFlights(start:$start, end:$end ) {
+      blockOffTime
+      blockOnTime
+      pilot {
+        id
+        pilotId
+        name
+      }
+      departure {
+        id
+      }
+      arrival {
+        id
+      }
+      alternate {
+        id
+      }
+      state
+      status
+      aircraft {
+        fleet
+        type
+        registration
+      }
+      time
+    }
+  }`
 };

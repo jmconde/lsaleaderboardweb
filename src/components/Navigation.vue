@@ -16,6 +16,7 @@
       <div class="navbar-start">
         <router-link class="navbar-item" to="/">{{$t('menu.home')}}</router-link>
         <router-link class="navbar-item" to="/alltime">{{$t('menu.alltime')}}</router-link>
+        <router-link class="navbar-item" to="/log">{{$t('menu.flightlog')}}</router-link>
         <router-link class="navbar-item" to="/aircrafts">{{$t('menu.aircrafts')}}</router-link>
         <router-link class="navbar-item" to="/live">{{$t('menu.livemap')}}</router-link>
         <!-- <router-link class="navbar-item" to="/test">Test</router-link> -->

@@ -4,6 +4,7 @@ import Dashboard from '../views/Dashboard.vue';
 import Aircrafts from '../views/Aircrafts.vue';
 import PilotsList from '../views/PilotsList.vue';
 import LiveMap from '../views/LiveMap.vue';
+import FlightLog from '../views/FlightLog.vue';
 
 Vue.use(VueRouter);
 
@@ -28,6 +29,11 @@ const routes = [
     path: "/live",
     name: "LiveMap",
     component: LiveMap,
+  },
+  {
+    path: "/log",
+    name: "FlightLog",
+    component: FlightLog,
   },
 ];
 

@@ -2,7 +2,7 @@
   <div>
     <div id="dashboard">
       <section class="pt-2">
-        <RangeSelector @range-change="rangeChanged" :seconds="120" :loading="loading" />
+        <RangeSelector auto-update @range-change="rangeChanged" :seconds="120" :loading="loading" />
         <div class="columns">
           <div class="column is-two-thirds">
             <div class="columns">

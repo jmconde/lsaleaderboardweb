@@ -70,13 +70,13 @@ import axios from 'axios';
 let initialRotation = 0;
 let initialLat = 11.1196;
 let initialLon = -74.2306;
-
+//https://crew.latinstreamingalliance.com/api/pireps/PRnxWl4r1eRWryZr/acars/geojson
 export default {
   props: {
     tilesUrl: {
       type: String,
-      // default: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-      default: 'https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png',
+      default: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      // default: 'https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png',
     },
     attribution: {
       type: String,

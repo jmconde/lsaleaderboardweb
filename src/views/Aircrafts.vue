@@ -28,7 +28,7 @@
             {{aircraft.name}}
           </td>
           <td>
-            {{aircraft.location}}
+            {{aircraft.location.id}}
           </td>
           <td>
             {{aircraft.status}}
@@ -51,9 +51,9 @@
 
 <script>
 
-import FormatTime from '../components/FormatTime.vue'
+import FormatTime from '../components/FormatTime.vue';
 import { GraphQLQueries } from '../data/graphql/queries';
-import { request } from 'graphql-request'
+import { request } from 'graphql-request';
 
 export default {
   data() {

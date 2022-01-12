@@ -20,8 +20,8 @@
     </div>
     <div class="level-right">
       <div>
-        <span v-if="!loading" class="mr-1 has-text-primary">{{$tc('labels.reloadIn', countdown, {countdown}) }}</span>
-        <span v-else class="mr-1 has-text-primary">{{$t('labels.updating') }}</span></div>
+        <span v-if="autoUpdate && !loading" class="mr-1 has-text-primary">{{$tc('labels.reloadIn', countdown, {countdown}) }}</span>
+        <span v-if="autoUpdate && loading" class="mr-1 has-text-primary">{{$t('labels.updating') }}</span></div>
         
         <a class="button is-white is-small is-rounded" @click="updateNow">
          <font-awesome-icon class="has-text-primary" icon="sync" :spin="loading"></font-awesome-icon>
@@ -58,6 +58,7 @@ const SECONDS_TO_RELOAD = 60;
 
 export default {
   props: {
+    autoUpdate: Boolean,
     loading: Boolean,
     seconds: {
       type: Number,
@@ -91,7 +92,9 @@ export default {
   mounted() {
     this.months = [11, 10, 9];
     this.weeks = [];
-    this.startCountDown();
+    if (this.autoUpdate) {
+      this.startCountDown();
+    }
   },
   beforeRouteLeave(to, from, next) {
     clearInterval(this.interval);
@@ -99,7 +102,7 @@ export default {
   },
   watch: {
     loading() {
-      if (!this.loading) {
+      if (this.autoUpdate && !this.loading) {
         this.startCountDown();
       }
     },
