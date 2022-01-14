@@ -5,14 +5,14 @@
         <img src="../assets/img/logo_28.png" height="28">
       </a>
 
-      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
+      <a role="button" @click="toggleBurger" ref="navBurger" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+        <span aria-hidden="false"></span>
+        <span aria-hidden="false"></span>
+        <span aria-hidden="false"></span>
       </a>
     </div>
 
-    <div id="navbarBasicExample" class="navbar-menu">
+    <div id="navbarBasicExample" class="navbar-menu" ref="navMenu">
       <div class="navbar-start">
         <router-link class="navbar-item" to="/">{{$t('menu.home')}}</router-link>
         <router-link class="navbar-item" to="/alltime">{{$t('menu.alltime')}}</router-link>
@@ -86,6 +86,11 @@ export default {
       this.$moment.locale(lang.locale);
       this.lang = lang;
       this.$root.$i18n.locale = lang.locale
+    },
+    toggleBurger() {
+      console.log('toggle');
+      this.$refs.navBurger.classList.toggle("is-active");
+      this.$refs.navMenu.classList.toggle("is-active");
     }
   }
 }

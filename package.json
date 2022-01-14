@@ -1,6 +1,6 @@
 {
   "name": "lsadashboard",
-  "version": "2.10.2",
+  "version": "2.11.0-beta.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -58,7 +58,9 @@
     "graphql": "^15.7.2",
     "graphql-request": "^3.7.0",
     "graphql-tag": "^2.12.6",
+    "haversine-geolocation": "^1.6.0",
     "leaflet": "^1.7.1",
+    "leaflet-ant-path": "^1.3.0",
     "lodash": "^4.17.21",
     "lottie-vuejs": "^0.4.0",
     "numeral": "^2.0.6",

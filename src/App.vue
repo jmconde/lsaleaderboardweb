@@ -40,31 +40,31 @@ export default {
   $body-font-size: 0.8em;
 
   @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,500;1,300&display=swap');
-  @import '../node_modules/bulma/sass/utilities/_all';
-  @import '../node_modules/bulma/sass/base/_all.sass';
-  @import "../node_modules/bulma/sass/grid/_all.sass";
-  @import '../node_modules/bulma/sass/helpers/_all';
-  @import "../node_modules/bulma/sass/components/navbar.sass";
-  @import "../node_modules/bulma/sass/components/level.sass";
-  @import "../node_modules/bulma/sass/components/media.sass";
-  @import "../node_modules/bulma/sass/components/modal.sass";
-  @import "../node_modules/bulma/sass/elements/progress.sass";
-  @import "../node_modules/bulma/sass/elements/button.sass";
-  @import "../node_modules/bulma/sass/elements/image.sass";
-  @import "../node_modules/bulma/sass/elements/container.sass";
-  @import "../node_modules/bulma/sass/elements/notification.sass";
-  @import "../node_modules/bulma/sass/elements/table.sass";
-  @import "../node_modules/bulma/sass/elements/tag.sass";
-  @import "../node_modules/bulma/sass/elements/title.sass";
-  @import "../node_modules/bulma/sass/layout/section.sass";
-  @import "../node_modules/bulma/sass/layout/footer.sass";
-  @import "../node_modules/bulma/sass/form/shared.sass";
-  @import "../node_modules/bulma/sass/form/select.sass";
+  // @import '../node_modules/bulma/sass/utilities/_all';
+  // @import '../node_modules/bulma/sass/base/_all.sass';
+  // @import "../node_modules/bulma/sass/grid/_all.sass";
+  // @import '../node_modules/bulma/sass/helpers/_all';
+  // @import "../node_modules/bulma/sass/components/navbar.sass";
+  // @import "../node_modules/bulma/sass/components/level.sass";
+  // @import "../node_modules/bulma/sass/components/media.sass";
+  // @import "../node_modules/bulma/sass/components/modal.sass";
+  // @import "../node_modules/bulma/sass/elements/progress.sass";
+  // @import "../node_modules/bulma/sass/elements/button.sass";
+  // @import "../node_modules/bulma/sass/elements/image.sass";
+  // @import "../node_modules/bulma/sass/elements/container.sass";
+  // @import "../node_modules/bulma/sass/elements/notification.sass";
+  // @import "../node_modules/bulma/sass/elements/table.sass";
+  // @import "../node_modules/bulma/sass/elements/tag.sass";
+  // @import "../node_modules/bulma/sass/elements/title.sass";
+  // @import "../node_modules/bulma/sass/layout/section.sass";
+  // @import "../node_modules/bulma/sass/layout/footer.sass";
+  // @import "../node_modules/bulma/sass/form/shared.sass";
+  // @import "../node_modules/bulma/sass/form/select.sass";
   
   // @import "../node_modules/bulma/sass/layout/footer.sass";
   // @import '../'
   // // dashbboard
-  // @import '~bulma/bulma';
+  @import '~bulma/bulma';
   :root {
     --font: 'Open Sans', sans-serif;
     --textColor: #374961;

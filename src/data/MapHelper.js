@@ -25,4 +25,40 @@ export const customIcons = {
     iconAnchor: [15, 15],
     popupAnchor: [0, -20],
   }),
+  iconLocationRed: icon({
+    iconUrl: require('../assets/img/location-red.png'),
+    iconSize: [12, 16],
+    iconAnchor: [6, 16],
+    popupAnchor: [0, -20],
+  }),
+  iconLocationYellow: icon({
+    iconUrl: require('../assets/img/location-yellow.png'),
+    iconSize: [12, 16],
+    iconAnchor: [6, 16],
+    popupAnchor: [0, -20],
+  }),
+  iconLocationBlue: icon({
+    iconUrl: require('../assets/img/location-blue.png'),
+    iconSize: [12, 16],
+    iconAnchor: [6, 16],
+    popupAnchor: [0, -20],
+  }),
+  iconLocationLightBlue: icon({
+    iconUrl: require('../assets/img/location-lightblue.png'),
+    iconSize: [12, 16],
+    iconAnchor: [6, 16],
+    popupAnchor: [0, -20],
+  }),
+  iconLocationGreen: icon({
+    iconUrl: require('../assets/img/location-green.png'),
+    iconSize: [12, 16],
+    iconAnchor: [6, 16],
+    popupAnchor: [0, -20],
+  }),
+  iconLocationGray: icon({
+    iconUrl: require('../assets/img/location-gray.png'),
+    iconSize: [12, 16],
+    iconAnchor: [6, 16],
+    popupAnchor: [0, -20],
+  }),
 };

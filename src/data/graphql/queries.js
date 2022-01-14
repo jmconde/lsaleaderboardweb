@@ -188,6 +188,34 @@ export const GraphQLQueries = {
   }`,
 
   GQL_LIVEMAP_DATA: gql`query getLiveMapData {
+    airports:getAirportList {
+      id
+      lat
+      lon
+      name
+      country
+      location
+      elevation
+      frequencies{
+        type
+        description
+        frequency_mhz
+      }
+      navaids {
+        ident
+        name
+        type
+        lat
+        lon
+        frequency_khz
+
+      }
+    }
+  }`,
+
+  
+
+  GQL_LIVEMAP_DATA_LIGHT: gql`query getLiveMapDataLight {
     pilots:getActivePilotList {
       id
       pilotId
@@ -205,6 +233,17 @@ export const GraphQLQueries = {
       flights
       flightTime
       country
+    }
+    aircrafts:getAircraftList {
+      id
+      type
+      registration
+      location {
+        id
+      }
+      status
+      state
+      fleet
     }
   }`,
 
