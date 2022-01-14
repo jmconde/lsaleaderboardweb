@@ -3,6 +3,7 @@
     <button @click="close" class="delete"></button>
     <h5 class="mb-1">{{data.id}} - {{data.name}}</h5>
     <p class="is-italic" ><small>{{data.location}}, {{getCountryName(data.country)}}<br/>{{data.elevation | formatNumber}} ft. ({{data.lat}}, {{data.lon}})</small></p>
+    
     <h6 v-if="data.pilots && data.pilots.length" class="mb-1">Pilots</h6>
     <div class="mb-1" v-for="(pilot) in data.pilots" :key="pilot.id">
       <div class="level mb-0">

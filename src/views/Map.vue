@@ -42,8 +42,8 @@
 
 <script>
 import { customIcons } from '../data/MapHelper';
-import { getBounds, getPilotsInAirport, getAircraftsInAirport, getPilotsByAirport, getAircraftsByAirport, getFlightPath } from '../helpers/mapHelper';
-import { LatLng, latLng, point } from "leaflet";
+import { getBounds,  getPilotsByAirport, getAircraftsByAirport, getFlightPath } from '../helpers/mapHelper';
+import { latLng, point } from "leaflet";
 import { LMap, LTileLayer, LLayerGroup} from 'vue2-leaflet';
 import { request } from 'graphql-request';
 import { GraphQLQueries } from '../data/graphql/queries';
@@ -68,7 +68,7 @@ export default {
     },
     pollingTime: {
       type: Number,
-      default: 5000,
+      default: 10000,
     }
   },
   data() {
@@ -165,33 +165,34 @@ export default {
     async addFlightPath(flight) {
       console.log('addFlightPath');
        const polyline = L.polyline(getFlightPath(flight), {
-          color: '#CEE2E8',
-          weight: 2,
-          dashArray: ''
+          color: '#B4B4B4',
+          weight: 1,
+          dashArray: '10 3'
         }).addTo(this.routesPathsGroup);
         this.routesPaths[flight.uid] = polyline;
 
         const geoson = await getGeoson(flight.uid);
-        const polyline2 = L.polyline(get(geoson, 'line.features[0].geometry.coordinates').map(d => latLng(d[1], d[0])), {
-          color: '#F3AD41',
-          weight: 2,
-          dashArray: ''
+        const polyline2 = L.polyline(get(geoson, 'line.features[0].geometry.coordinates', []).map(d => latLng(d[1], d[0])), {
+          // color: '#F3AD41',
+          color: '#121212',
+          weight: 3,
+          dashArray: '',
+          fill: true,
+          fillColor: '#ffffff'
         }).addTo(this.routesPathsGroup);
         this.liveRoutesPaths[flight.uid] = polyline2;
-        console.log('geoson :>> ', geoson);
     },
     removeFlight(uid) {
       this.routesPaths[uid].removeFrom(this.routesPathsGroup);
       this.liveRoutesPaths[uid].removeFrom(this.routesPathsGroup);
       delete this.routesPaths[uid];
       delete this.liveRoutesPaths[uid];
-      console.log(this.routesPaths);
     },
     updatePaths(acars) {
       acars.forEach(async (flight) => {
         const pirep = flight.position.pirep_id;
         const geoson = await getGeoson(pirep);
-        const latlngs = get(geoson, 'line.features[0].geometry.coordinates').map(d => latLng(d[1], d[0]));
+        const latlngs = get(geoson, 'line.features[0].geometry.coordinates', []).map(d => latLng(d[1], d[0]));
         const polyline = this.routesPaths[pirep];
         const polyline2 = this.liveRoutesPaths[pirep];
         if (polyline) {
@@ -210,7 +211,7 @@ export default {
       else if (keys.length === 1) {
         this.zoom = 6;
         this.map.setView(this.flightsMarkers[keys[0]].getLatLng(), this.zoom);
-      } else  if (flights.length > 1) {
+      } else  if (keys.length > 1) {
         this.map.fitBounds(getBounds(this.flightsMarkers), [30, 30]);
       }    
     },

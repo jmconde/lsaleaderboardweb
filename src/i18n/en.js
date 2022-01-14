@@ -16,7 +16,7 @@ export const en = {
     home: 'Home',
     alltime: 'All time stats',
     aircrafts: 'Aircrafts',
-    livemap: 'Live Map (Test)',
+    livemap: 'Live Map (Beta)',
     flightlog: 'Flight Log',
   },
   metrics: {

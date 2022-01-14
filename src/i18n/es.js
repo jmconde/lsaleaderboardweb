@@ -16,7 +16,7 @@ export const es = {
     home: 'Inicio',
     alltime: 'Estadísticas generales',
     aircrafts: 'Aeronaves',
-    livemap: 'Mapa en Tiempo Real (Test)',
+    livemap: 'Mapa en Tiempo Real (Beta)',
     flightlog: 'Bitácora',
   },
   metrics: {

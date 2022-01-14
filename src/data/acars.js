@@ -13,7 +13,6 @@ export const getAcars = async () => {
 export const getGeoson = async (id) => {console.log('getGeoson');
   try {
     const response = await axios.get(`${process.env.ROOT_API}/geoson/${id}`);
-    console.log(response);
     return response.data.data;
   } catch(err) {
     console.log(err);

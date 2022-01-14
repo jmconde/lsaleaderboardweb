@@ -1,6 +1,7 @@
 import { latLngBounds, latLng, point } from "leaflet";
 
-export const getBounds = (data = []) => {
+export const getBounds = (map = {}) => {
+  const data = Object.values(map);
   if (!data.length) {
     return [latLng(11.1196, -74.2306), latLng(11.1196, -74.2306)]
   }
@@ -10,11 +11,11 @@ export const getBounds = (data = []) => {
   let maxLon = -999;
   
   data.forEach((d) => {
-    const { lat, lon } = d.getLatLng();
+    const { lat, lng } = d.getLatLng();
     if (lat < minLat) { minLat = lat; }
     if (lat > maxLat) { maxLat = lat; }
-    if (lon < minLon) { minLon = lon; }
-    if (lon > maxLon) { maxLon = lon; }
+    if (lng < minLon) { minLon = lng; }
+    if (lng > maxLon) { maxLon = lng; }
   });
 
   return [ latLng(minLat, minLon), latLng(maxLat, maxLon) ];
